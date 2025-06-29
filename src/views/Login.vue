@@ -1,11 +1,8 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <div class="login-header">
-        <h2>学生管理系统</h2>
-        <p>Student Management System</p>
-      </div>
-      
+  <div class="login-bg">
+    <div class="bg-decor"></div>
+    <div class="login-center-card">
+      <div class="login-title"><span class="logo-icon">🎓</span>学生管理系统</div>
       <el-form
         ref="loginFormRef"
         :model="loginForm"
@@ -16,25 +13,24 @@
         <el-form-item prop="userType">
           <el-select
             v-model="loginForm.userType"
-            placeholder="请选择用户类型"
+            placeholder="选择用户类型"
             size="large"
-            style="width: 100%"
+            class="user-type-select"
           >
             <el-option label="学生" :value="1" />
             <el-option label="教师" :value="2" />
             <el-option label="管理员" :value="3" />
           </el-select>
         </el-form-item>
-        
         <el-form-item prop="username">
           <el-input
             v-model="loginForm.username"
             placeholder="请输入用户名"
             size="large"
             :prefix-icon="User"
+            class="login-input"
           />
         </el-form-item>
-        
         <el-form-item prop="password">
           <el-input
             v-model="loginForm.password"
@@ -43,10 +39,10 @@
             size="large"
             :prefix-icon="Lock"
             show-password
+            class="login-input"
             @keyup.enter="handleLogin"
           />
         </el-form-item>
-        
         <el-form-item>
           <el-button
             type="primary"
@@ -55,14 +51,10 @@
             class="login-button"
             @click="handleLogin"
           >
-            登录
+            {{ loading ? '登录中...' : '登录' }}
           </el-button>
         </el-form-item>
       </el-form>
-      
-      <div class="login-footer">
-        <p>支持管理员、教师、学生三种角色登录</p>
-      </div>
     </div>
   </div>
 </template>
@@ -105,23 +97,49 @@ const handleLogin = async () => {
     await loginFormRef.value.validate()
     loading.value = true
     
+    console.log('开始登录，参数:', {
+      username: loginForm.username,
+      password: loginForm.password,
+      userType: loginForm.userType
+    })
+    
     const result = await authStore.login(loginForm.username, loginForm.password, loginForm.userType)
+    
+    console.log('登录结果:', result)
     
     if (result.success) {
       ElMessage.success('登录成功')
       
       // 根据用户角色跳转到对应的首页
+      let targetRoute = ''
+      
       if (authStore.hasRole('admin')) {
-        router.push('/admin/dashboard')
+        targetRoute = '/admin/dashboard'
       } else if (authStore.hasRole('student')) {
-        router.push('/student/dashboard')
+        targetRoute = '/student/dashboard'
       } else if (authStore.hasRole('teacher')) {
-        router.push('/teacher/dashboard')
+        targetRoute = '/teacher/dashboard'
+      }
+      
+      console.log('准备跳转到:', targetRoute)
+      
+      if (targetRoute) {
+        try {
+          await router.push(targetRoute)
+          console.log('路由跳转成功')
+        } catch (routerError) {
+          console.error('路由跳转失败:', routerError)
+          ElMessage.error('页面跳转失败，请刷新页面重试')
+        }
+      } else {
+        console.error('未找到匹配的用户角色')
+        ElMessage.error('用户角色识别失败')
       }
     } else {
       ElMessage.error(result.message || '登录失败')
     }
   } catch (error) {
+    console.error('登录异常:', error)
     ElMessage.error('登录失败，请检查输入信息')
   } finally {
     loading.value = false
@@ -130,51 +148,137 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.login-container {
+.login-bg {
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
+  min-width: 100vw;
+  background: linear-gradient(120deg, #f3f0ff 0%, #e9e4f7 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
 }
 
-.login-box {
-  width: 400px;
-  padding: 40px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+.bg-decor {
+  position: absolute;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  background: none;
+}
+.bg-decor::before, .bg-decor::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.18;
+}
+.bg-decor::before {
+  width: 420px; height: 420px;
+  left: -120px; top: -120px;
+  background: radial-gradient(circle, #a18cd1 0%, #fbc2eb 100%);
+}
+.bg-decor::after {
+  width: 320px; height: 320px;
+  right: -80px; bottom: -80px;
+  background: radial-gradient(circle, #fad0c4 0%, #ffd1ff 100%);
 }
 
-.login-header {
-  text-align: center;
-  margin-bottom: 30px;
+.login-center-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(80, 80, 120, 0.13);
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.7s;
+  z-index: 2;
 }
 
-.login-header h2 {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-title {
+  font-size: 26px;
+  font-weight: 700;
   color: #333;
-  margin-bottom: 10px;
-  font-size: 28px;
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-
-.login-header p {
-  color: #666;
-  font-size: 14px;
+.logo-icon {
+  font-size: 30px;
+  margin-right: 4px;
 }
 
 .login-form {
-  margin-bottom: 20px;
+  width: 100%;
+}
+
+.user-type-select {
+  width: 100%;
+}
+
+.login-input {
+  width: 100%;
+}
+
+.login-input :deep(.el-input__wrapper) {
+  border-radius: 8px;
+  border: 1.5px solid #e4e7ed;
+  transition: all 0.3s;
+}
+
+.login-input :deep(.el-input__wrapper:hover) {
+  border-color: #a18cd1;
+}
+
+.login-input :deep(.el-input__wrapper.is-focus) {
+  border-color: #a18cd1;
+  box-shadow: 0 0 0 2px rgba(161, 140, 209, 0.08);
 }
 
 .login-button {
   width: 100%;
-  height: 45px;
+  height: 44px;
   font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  border: none;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(161, 140, 209, 0.08);
 }
 
-.login-footer {
-  text-align: center;
-  color: #999;
-  font-size: 12px;
+.login-button:hover {
+  box-shadow: 0 6px 18px rgba(161, 140, 209, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.login-button.is-loading {
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+}
+
+@media (max-width: 480px) {
+  .login-center-card {
+    max-width: 95vw;
+    padding: 24px 8px 16px 8px;
+  }
+  .login-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 </style> 
