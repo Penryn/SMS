@@ -49,14 +49,23 @@ api.interceptors.response.use(
     // 如果是CORS错误，提供友好的错误信息
     if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
       console.error('CORS错误，请检查代理配置或API服务器设置');
+      // 不要在这里处理401跳转，让具体的业务逻辑处理
     }
     
+    // 对于401错误，不在这里自动跳转，让具体的业务逻辑决定如何处理
+    // 这样可以避免在登录页面出现循环跳转的问题
+    
+    // 确保错误信息能够正确传递
     if (error.response?.status === 401) {
-      // 未授权，清除token并跳转到登录页
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      // 只在非登录页面时清除token
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login' && currentPath !== '/') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
+    
     return Promise.reject(error);
   }
 );

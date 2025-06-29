@@ -1,11 +1,72 @@
 <template>
   <div class="layout-root">
     <aside class="sidebar">
-      <slot name="sidebar"></slot>
+      <div class="logo">
+        <h2>教师管理系统</h2>
+        <p>Teacher Management</p>
+      </div>
+      
+      <el-menu
+        :default-active="route.path"
+        class="sidebar-menu"
+        background-color="#253858"
+        text-color="#bfcbd9"
+        active-text-color="#409EFF"
+        router
+      >
+        <el-menu-item index="/teacher/dashboard">
+          <el-icon><DataBoard /></el-icon>
+          <span>仪表盘</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/teacher/courses">
+          <el-icon><Reading /></el-icon>
+          <span>我的课程</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/teacher/students">
+          <el-icon><User /></el-icon>
+          <span>学生管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/teacher/scores">
+          <el-icon><Document /></el-icon>
+          <span>成绩管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/teacher/profile">
+          <el-icon><Avatar /></el-icon>
+          <span>个人信息</span>
+        </el-menu-item>
+      </el-menu>
     </aside>
-    <main class="main-content">
-      <slot />
-    </main>
+    
+    <div class="main-area">
+      <header class="header">
+        <div class="header-left">
+          <h3>{{ getCurrentPageTitle() }}</h3>
+        </div>
+        <div class="header-right">
+          <el-dropdown @command="handleCommand">
+            <span class="user-info">
+              <el-icon class="user-avatar"><User /></el-icon>
+              <span class="username">{{ username }}</span>
+              <el-icon><ArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </header>
+      
+      <main class="main-content">
+        <router-view />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -27,9 +88,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-const userAvatar = computed(() => {
-  return ''
-})
+const username = computed(() => authStore.user?.username || '')
 
 const getCurrentPageTitle = () => {
   const routeMap: Record<string, string> = {
@@ -75,6 +134,7 @@ const handleCommand = async (command: string) => {
   margin: 0;
   padding: 0;
 }
+
 .sidebar {
   width: 220px;
   height: 100vh;
@@ -86,6 +146,7 @@ const handleCommand = async (command: string) => {
   margin: 0;
   padding: 0;
 }
+
 .main-area {
   flex: 1;
   height: 100vh;
@@ -95,6 +156,7 @@ const handleCommand = async (command: string) => {
   margin: 0;
   padding: 0;
 }
+
 .header {
   height: 64px;
   background: #fff;
@@ -106,6 +168,7 @@ const handleCommand = async (command: string) => {
   box-sizing: border-box;
   margin: 0;
 }
+
 .main-content {
   flex: 1;
   overflow: auto;
@@ -116,31 +179,38 @@ const handleCommand = async (command: string) => {
   margin: 0;
   padding: 0;
 }
+
 .logo {
   padding: 20px;
   text-align: center;
   border-bottom: 1px solid #435266;
 }
+
 .logo h2 {
   margin: 0;
   font-size: 18px;
   color: #fff;
 }
+
 .logo p {
   margin: 5px 0 0 0;
   font-size: 12px;
   color: #bfcbd9;
 }
+
 .sidebar-menu {
   border: none;
 }
+
 .header-left {
   flex: 1;
 }
+
 .header-right {
   display: flex;
   align-items: center;
 }
+
 .user-info {
   display: flex;
   align-items: center;
@@ -149,11 +219,25 @@ const handleCommand = async (command: string) => {
   border-radius: 4px;
   transition: background-color 0.3s;
 }
+
 .user-info:hover {
   background-color: #f5f5f5;
 }
+
 .username {
   margin: 0 8px;
   color: #333;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background: #409EFF;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
 }
 </style> 

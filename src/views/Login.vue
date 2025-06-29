@@ -137,11 +137,32 @@ const handleLogin = async () => {
         ElMessage.error('用户角色识别失败')
       }
     } else {
-      ElMessage.error(result.message || '登录失败')
+      // 显示具体的错误信息
+      const errorMessage = result.message || '登录失败，请检查用户名和密码'
+      console.log('准备显示错误信息:', errorMessage)
+      ElMessage.error(errorMessage)
+      console.error('登录失败:', errorMessage)
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('登录异常:', error)
-    ElMessage.error('登录失败，请检查输入信息')
+    
+    // 根据错误类型显示不同的错误信息
+    let errorMessage = '登录失败，请检查输入信息'
+    
+    if (error.message) {
+      if (error.message.includes('Network Error') || error.message.includes('ERR_NETWORK')) {
+        errorMessage = '网络连接失败，请检查网络设置或联系管理员'
+      } else if (error.message.includes('timeout')) {
+        errorMessage = '请求超时，请稍后重试'
+      } else if (error.message.includes('CORS')) {
+        errorMessage = '服务器连接异常，请联系管理员'
+      } else {
+        errorMessage = error.message
+      }
+    }
+    
+    console.log('准备显示异常错误信息:', errorMessage)
+    ElMessage.error(errorMessage)
   } finally {
     loading.value = false
   }
@@ -162,7 +183,7 @@ const handleLogin = async () => {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 1;
 }
 
 .bg-decor {
@@ -200,7 +221,7 @@ const handleLogin = async () => {
   flex-direction: column;
   align-items: center;
   animation: fadeIn 0.7s;
-  z-index: 2;
+  z-index: 10;
 }
 
 @keyframes fadeIn {
@@ -248,7 +269,7 @@ const handleLogin = async () => {
 }
 
 :global(.user-type-dropdown) {
-  z-index: 9999 !important;
+  z-index: 3000 !important;
 }
 
 .login-input {
