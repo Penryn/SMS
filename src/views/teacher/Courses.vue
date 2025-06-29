@@ -9,7 +9,7 @@
               <el-option label="全部" value="" />
               <el-option v-for="year in years" :key="year" :label="year" :value="year" />
             </el-select>
-            <el-select v-model="selectedSemester" placeholder="选择学期" size="small" style="width:100px;" @change="loadCourses">
+            <el-select v-model="selectedSemester" :placeholder="selectedSemester === '' ? '全部' : '选择学期'" size="small" style="width:100px;" @change="loadCourses">
               <el-option label="全部" value="" />
               <el-option label="上学期" value="1" />
               <el-option label="下学期" value="2" />
@@ -24,17 +24,19 @@
         style="width: 100%"
       >
         <el-table-column prop="course_name" label="课程名称" />
+        <el-table-column prop="class_name" label="班级" />
         <el-table-column prop="credits" label="学分" />
-        <el-table-column prop="year" label="学年" />
+        <el-table-column prop="school_year" label="学年" />
         <el-table-column prop="semester" label="学期">
           <template #default="{ row }">
             {{ row.semester === 1 ? '上学期' : '下学期' }}
           </template>
         </el-table-column>
         <el-table-column prop="hours" label="课时" />
-        <el-table-column prop="exam_type" label="考试类型">
+        <el-table-column prop="exam_type" label="考试类型" />
+        <el-table-column label="任课教师">
           <template #default="{ row }">
-            {{ row.exam_type === '1' ? '考试' : '考查' }}
+            {{ teacherNames(row.teachers) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200">
@@ -61,9 +63,15 @@ const authStore = useAuthStore()
 
 const loading = ref(false)
 const courses = ref<Course[]>([])
-const selectedYear = ref('')
-const selectedSemester = ref('')
+const currentYear = new Date().getFullYear()
 const years = ref<number[]>([])
+const selectedYear = ref(String(currentYear))
+const selectedSemester = ref('')
+
+// 初始化学年列表 2020~今年
+for (let y = currentYear; y >= 2020; y--) {
+  years.value.push(y)
+}
 
 const loadCourses = async () => {
   loading.value = true
@@ -71,22 +79,28 @@ const loadCourses = async () => {
     const teacherId = authStore.user?.id
     if (!teacherId) return
 
-    const response = await teacherApi.getCourse(
-      teacherId, 
-      selectedYear.value ? Number(selectedYear.value) : undefined,
-      selectedSemester.value ? Number(selectedSemester.value) : undefined
-    )
-    
-    if (response.code === 0 && Array.isArray(response.data.courses)) {
-      courses.value = response.data.courses
-      
-      // 生成年份列表
-      const yearSet = new Set<number>()
-      response.data.courses.forEach((course: Course) => {
-        if (course.year) yearSet.add(course.year)
-      })
-      years.value = Array.from(yearSet).sort((a, b) => b - a)
+    const year = selectedYear.value ? Number(selectedYear.value) : currentYear
+    let allCourses: Course[] = []
+    if (!selectedSemester.value) {
+      // 学期为全部，分别请求上学期和下学期
+      const [res1, res2] = await Promise.all([
+        teacherApi.getCourse(teacherId, year, 1),
+        teacherApi.getCourse(teacherId, year, 2)
+      ])
+      if (res1.code === 0 && Array.isArray(res1.data.courses)) {
+        allCourses = allCourses.concat(res1.data.courses)
+      }
+      if (res2.code === 0 && Array.isArray(res2.data.courses)) {
+        allCourses = allCourses.concat(res2.data.courses)
+      }
+    } else {
+      // 只请求选中的学期
+      const res = await teacherApi.getCourse(teacherId, year, Number(selectedSemester.value))
+      if (res.code === 0 && Array.isArray(res.data.courses)) {
+        allCourses = res.data.courses
+      }
     }
+    courses.value = allCourses
   } catch (error) {
     ElMessage.error('加载课程列表失败')
   } finally {
@@ -106,6 +120,10 @@ const manageScores = (course: Course) => {
     path: '/teacher/scores',
     query: { courseId: course.course_id.toString() }
   })
+}
+
+function teacherNames(teachers: Array<{ teacher_name: string }>) {
+  return teachers && teachers.length ? teachers.map(t => t.teacher_name).join('，') : '-';
 }
 
 onMounted(() => {

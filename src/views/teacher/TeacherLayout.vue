@@ -145,16 +145,20 @@ const handleCommand = async (command: string) => {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .main-area {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .header {
@@ -167,11 +171,15 @@ const handleCommand = async (command: string) => {
   padding: 0 20px;
   box-sizing: border-box;
   margin: 0;
+  flex-shrink: 0;
 }
 
 .main-content {
-  flex: 1;
-  overflow: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: transparent;
   display: flex;
   flex-direction: column;

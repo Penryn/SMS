@@ -4,17 +4,6 @@
       <template #header>
         <div class="page-header">
           <span>学生管理</span>
-          <div class="filter-section">
-            <el-select v-model="selectedYear" placeholder="选择学年" size="small" style="width:120px;margin-right:8px;" @change="loadStudents">
-              <el-option label="全部" value="" />
-              <el-option v-for="year in years" :key="year" :label="year" :value="year" />
-            </el-select>
-            <el-select v-model="selectedSemester" placeholder="选择学期" size="small" style="width:100px;" @change="loadStudents">
-              <el-option label="全部" value="" />
-              <el-option label="上学期" value="1" />
-              <el-option label="下学期" value="2" />
-            </el-select>
-          </div>
         </div>
       </template>
       
@@ -23,16 +12,15 @@
         :data="students"
         style="width: 100%"
       >
-        <el-table-column prop="name" label="姓名" />
-        <el-table-column prop="student_id" label="学号" />
-        <el-table-column prop="gender" label="性别" />
-        <el-table-column prop="age" label="年龄" />
-        <el-table-column prop="gpa" label="GPA" />
-        <el-table-column prop="total_credits" label="已修学分" />
-        <el-table-column label="操作" width="200">
+        <!-- <el-table-column prop="student_id" label="学号" /> -->
+        <el-table-column prop="student_name" label="姓名" />
+        <el-table-column prop="class_name" label="班级" />
+        <el-table-column prop="score" label="成绩" />
+        <el-table-column prop="rank" label="班级排名" />
+        <el-table-column label="操作" width="180">
           <template #default="{ row }">
             <el-button size="small" @click="viewStudent(row)">查看详情</el-button>
-            <el-button size="small" type="primary" @click="viewStudentScores(row)">查看成绩</el-button>
+            <el-button size="small" type="primary" @click="setScore(row)">设置成绩</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -42,18 +30,20 @@
     <el-dialog
       v-model="studentDialogVisible"
       title="学生详细信息"
-      width="600px"
+      width="500px"
     >
-      <div v-if="selectedStudent" class="student-detail">
-        <el-descriptions :column="2" border>
-          <el-descriptions-item label="姓名">{{ selectedStudent.name }}</el-descriptions-item>
+      <el-card v-if="selectedStudent" class="student-detail-card">
+        <el-descriptions :column="1" border>
           <el-descriptions-item label="学号">{{ selectedStudent.student_id }}</el-descriptions-item>
-          <el-descriptions-item label="性别">{{ selectedStudent.gender }}</el-descriptions-item>
+          <el-descriptions-item label="姓名">{{ selectedStudent.name }}</el-descriptions-item>
+          <el-descriptions-item label="性别">{{ selectedStudent.gender === 'M' ? '男' : selectedStudent.gender === 'F' ? '女' : selectedStudent.gender }}</el-descriptions-item>
           <el-descriptions-item label="年龄">{{ selectedStudent.age }}</el-descriptions-item>
+          <el-descriptions-item label="城市">{{ (selectedStudent as any).city_name }}</el-descriptions-item>
+          <el-descriptions-item label="班级">{{ (selectedStudent as any).class_name }}</el-descriptions-item>
           <el-descriptions-item label="GPA">{{ selectedStudent.gpa }}</el-descriptions-item>
           <el-descriptions-item label="已修学分">{{ selectedStudent.total_credits }}</el-descriptions-item>
         </el-descriptions>
-      </div>
+      </el-card>
     </el-dialog>
   </div>
 </template>
@@ -113,25 +103,27 @@ const viewStudent = async (student: Student) => {
   try {
     const teacherId = authStore.user?.id
     if (!teacherId) return
-
     // 调用获取学生详细信息接口
     const response = await teacherApi.getStudent(teacherId, student.student_id)
-    if (response.code === 0 && response.data.student) {
-      selectedStudent.value = response.data.student
+    console.log('getStudent response:', response)
+    if (response.code === 0) {
+      selectedStudent.value = response.data as unknown as Student
       studentDialogVisible.value = true
+      console.log('selectedStudent:', selectedStudent.value)
+      console.log('studentDialogVisible:', studentDialogVisible.value)
     }
   } catch (error) {
     ElMessage.error('获取学生详情失败')
   }
 }
 
-const viewStudentScores = (student: Student) => {
+const setScore = (student: Student) => {
   // 跳转到成绩管理页面，并传递学生ID
   router.push({
     path: '/teacher/scores',
-    query: { 
+    query: {
       courseId: route.query.courseId,
-      studentId: student.student_id 
+      studentId: student.student_id
     }
   })
 }
@@ -159,5 +151,10 @@ onMounted(() => {
 
 .student-detail {
   padding: 20px 0;
+}
+
+.student-detail-card {
+  margin: 0 auto;
+  max-width: 400px;
 }
 </style> 

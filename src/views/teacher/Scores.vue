@@ -74,18 +74,20 @@
     <el-dialog
       v-model="studentDialogVisible"
       title="学生详细信息"
-      width="600px"
+      width="500px"
     >
-      <div v-if="selectedStudent" class="student-detail">
-        <el-descriptions :column="2" border>
-          <el-descriptions-item label="姓名">{{ selectedStudent.name }}</el-descriptions-item>
+      <el-card v-if="selectedStudent" class="student-detail-card">
+        <el-descriptions :column="1" border>
           <el-descriptions-item label="学号">{{ selectedStudent.student_id }}</el-descriptions-item>
-          <el-descriptions-item label="性别">{{ selectedStudent.gender }}</el-descriptions-item>
+          <el-descriptions-item label="姓名">{{ selectedStudent.name }}</el-descriptions-item>
+          <el-descriptions-item label="性别">{{ selectedStudent.gender === 'M' ? '男' : selectedStudent.gender === 'F' ? '女' : selectedStudent.gender }}</el-descriptions-item>
           <el-descriptions-item label="年龄">{{ selectedStudent.age }}</el-descriptions-item>
+          <el-descriptions-item label="城市">{{ (selectedStudent as any).city_name }}</el-descriptions-item>
+          <el-descriptions-item label="班级">{{ (selectedStudent as any).class_name }}</el-descriptions-item>
           <el-descriptions-item label="GPA">{{ selectedStudent.gpa }}</el-descriptions-item>
           <el-descriptions-item label="已修学分">{{ selectedStudent.total_credits }}</el-descriptions-item>
         </el-descriptions>
-      </div>
+      </el-card>
     </el-dialog>
   </div>
 </template>
@@ -292,5 +294,9 @@ onMounted(() => {
 
 .student-detail {
   padding: 20px 0;
+}
+
+.student-detail-card {
+  padding: 20px;
 }
 </style> 
