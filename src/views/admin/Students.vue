@@ -4,7 +4,7 @@
       <template #header>
         <div class="page-header">
           <span>学生管理</span>
-          <el-button type="primary" @click="showAddDialog = true">
+          <el-button type="primary" @click="resetForm(); showAddDialog = true">
             <el-icon><Plus /></el-icon>
             添加学生
           </el-button>
@@ -13,17 +13,37 @@
       
       <el-table
         v-loading="loading"
-        :data="students"
+        :data="paginatedStudents"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="姓名" />
         <el-table-column prop="student_id" label="学号" />
-        <el-table-column prop="gender" label="性别" />
-        <el-table-column prop="phone" label="电话" />
-        <el-table-column prop="email" label="邮箱" />
-        <el-table-column prop="gpa" label="GPA" />
+        <el-table-column prop="gender" label="性别">
+          <template #default="{ row }">
+            {{ row.gender === 'M' ? '男' : '女' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="age" label="年龄" />
+        <el-table-column prop="province_id" label="省份">
+          <template #default="{ row }">
+            {{ getProvinceNameByCity(row.city_id) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="city_id" label="城市">
+          <template #default="{ row }">
+            {{ getCityName(row.city_id) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="department_id" label="部门">
+          <template #default="{ row }">
+            {{ getDepartmentNameByClass(row.class_id) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="class_id" label="班级">
+          <template #default="{ row }">
+            {{ getClassName(row.class_id) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button size="small" @click="handleEdit(row)">编辑</el-button>
@@ -31,6 +51,19 @@
           </template>
         </el-table-column>
       </el-table>
+      
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+          v-model:current-page="pagination.currentPage"
+          v-model:page-size="pagination.pageSize"
+          :page-sizes="[15, 20, 50, 100]"
+          :total="pagination.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-card>
     
     <!-- 添加/编辑学生对话框 -->
@@ -53,26 +86,55 @@
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select v-model="form.gender" placeholder="请选择性别">
-            <el-option label="男" value="男" />
-            <el-option label="女" value="女" />
+            <el-option label="男" value="M" />
+            <el-option label="女" value="F" />
           </el-select>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="form.phone" />
+        <el-form-item label="年龄" prop="age">
+          <el-input v-model="form.age" type="number" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" />
+        <el-form-item label="省份" prop="province_id">
+          <el-select v-model="form.province_id" placeholder="请选择省份" @change="onProvinceChange">
+            <el-option 
+              v-for="province in provinces" 
+              :key="province.id" 
+              :label="province.name" 
+              :value="province.id" 
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" type="textarea" />
+        <el-form-item label="城市" prop="city_id" v-if="form.province_id">
+          <el-select v-model="form.city_id" placeholder="请选择城市">
+            <el-option 
+              v-for="city in filteredCities" 
+              :key="city.id" 
+              :label="city.name" 
+              :value="city.id" 
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="生日" prop="birthday">
-          <el-date-picker
-            v-model="form.birthday"
-            type="date"
-            placeholder="选择日期"
-            style="width: 100%"
-          />
+        <el-form-item label="部门" prop="department_id">
+          <el-select v-model="form.department_id" placeholder="请选择部门" @change="onDepartmentChange">
+            <el-option 
+              v-for="department in departments" 
+              :key="department.id" 
+              :label="department.name" 
+              :value="department.id" 
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班级" prop="class_id" v-if="form.department_id">
+          <el-select v-model="form.class_id" placeholder="请选择班级">
+            <el-option 
+              v-for="classItem in filteredClasses" 
+              :key="classItem.id" 
+              :label="classItem.name" 
+              :value="classItem.id" 
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="密码" prop="password" v-if="!isEdit">
+          <el-input v-model="form.password" type="password" placeholder="可选，留空则后端自动生成" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -86,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
@@ -97,34 +159,61 @@ const authStore = useAuthStore()
 
 const loading = ref(false)
 const students = ref<Student[]>([])
+const cities = ref<any[]>([])
+const classes = ref<any[]>([])
+const departments = ref<any[]>([])
+const provinces = ref<any[]>([])
 const showAddDialog = ref(false)
 const isEdit = ref(false)
 const formRef = ref()
+
+// 分页相关
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 15,
+  total: 0
+})
+
+// 计算当前页显示的学生数据
+const paginatedStudents = computed(() => {
+  const start = (pagination.currentPage - 1) * pagination.pageSize
+  const end = start + pagination.pageSize
+  return students.value.slice(start, end)
+})
 
 const form = reactive({
   id: 0,
   name: '',
   student_id: '',
-  class_id: 0,
-  department_id: 0,
+  password: '',
   gender: '',
-  phone: '',
-  email: '',
-  address: '',
-  birthday: '',
-  enrollment_date: '',
-  gpa: 0
+  age: 0,
+  city_id: '',
+  class_id: '',
+  province_id: '',
+  department_id: ''
 })
 
 const rules = {
   name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   student_id: [{ required: true, message: '请输入学号', trigger: 'blur' }],
+  password: [{ required: false, message: '请输入密码', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
-  phone: [{ required: true, message: '请输入电话', trigger: 'blur' }],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
-  ]
+  age: [
+    { required: true, message: '请输入年龄', trigger: 'blur' },
+    { validator: (rule: any, value: any, callback: any) => {
+      const age = Number(value)
+      if (isNaN(age) || age < 1 || age > 120) {
+        callback(new Error('年龄必须在1-120之间'))
+      } else {
+        callback()
+      }
+    }, trigger: 'blur' }
+  ],
+  city_id: [{ required: true, message: '请选择城市', trigger: 'change' }],
+  class_id: [{ required: true, message: '请选择班级', trigger: 'change' }],
+  province_id: [{ required: true, message: '请选择省份', trigger: 'change' }],
+  department_id: [{ required: true, message: '请选择部门', trigger: 'change' }]
 }
 
 const loadStudents = async () => {
@@ -134,6 +223,7 @@ const loadStudents = async () => {
     const response = await adminApi.getStudents(adminId)
     if (response.code === 0) {
       students.value = response.data.list || []
+      pagination.total = students.value.length
     }
   } catch (error) {
     ElMessage.error('加载学生列表失败')
@@ -142,10 +232,94 @@ const loadStudents = async () => {
   }
 }
 
+const loadCities = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getCities(adminId)
+    if (response.code === 0) {
+      cities.value = response.data.cities || []
+    }
+  } catch (error) {
+    console.error('加载城市列表失败:', error)
+  }
+}
+
+const loadClasses = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getClasses(adminId)
+    if (response.code === 0) {
+      classes.value = response.data.list || []
+    }
+  } catch (error) {
+    console.error('加载班级列表失败:', error)
+  }
+}
+
+const loadDepartments = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getDepartments(adminId)
+    if (response.code === 0) {
+      departments.value = response.data.list || []
+    }
+  } catch (error) {
+    console.error('加载部门列表失败:', error)
+  }
+}
+
+const loadProvinces = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getProvinces(adminId)
+    if (response.code === 0) {
+      provinces.value = response.data.provinces || []
+    }
+  } catch (error) {
+    console.error('加载省份列表失败:', error)
+  }
+}
+
 const handleEdit = (row: Student) => {
   isEdit.value = true
-  Object.assign(form, row)
+  
+  // 使用类型断言来处理可能缺失的字段
+  const studentRow = row as any
+  
+  // 根据城市ID找到对应的省份ID
+  const city = cities.value.find(c => c.id === studentRow.city_id)
+  const provinceId = city ? city.province_id : ''
+  
+  // 根据班级ID找到对应的部门ID
+  const classItem = classes.value.find(c => c.id === studentRow.class_id)
+  const departmentId = classItem ? classItem.department_id : ''
+  
+  Object.assign(form, {
+    ...studentRow,
+    province_id: provinceId,
+    department_id: departmentId
+  })
+  
   showAddDialog.value = true
+}
+
+const resetForm = () => {
+  isEdit.value = false
+  Object.assign(form, {
+    id: 0,
+    name: '',
+    student_id: '',
+    password: '',
+    gender: '',
+    age: 0,
+    city_id: '',
+    class_id: '',
+    province_id: '',
+    department_id: ''
+  })
+  if (formRef.value) {
+    formRef.value.resetFields()
+  }
 }
 
 const handleDelete = async (row: Student) => {
@@ -175,29 +349,113 @@ const handleSubmit = async () => {
     
     const adminId = authStore.user?.id || 1
     
+    // 准备提交数据，将字符串ID转换为数字
+    const submitData = {
+      ...form,
+      admin_id: adminId,
+      age: Number(form.age),
+      city_id: Number(form.city_id),
+      class_id: Number(form.class_id),
+      province_id: Number(form.province_id),
+      department_id: Number(form.department_id)
+    }
+    
     if (isEdit.value) {
       // 编辑学生
-      await adminApi.updateStudent({ ...form, admin_id: adminId })
+      await adminApi.updateStudent(submitData)
       ElMessage.success('更新成功')
     } else {
       // 添加学生
-      await adminApi.createStudent({ ...form, admin_id: adminId })
+      await adminApi.createStudent(submitData)
       ElMessage.success('添加成功')
     }
     
     showAddDialog.value = false
+    resetForm()
     loadStudents()
   } catch (error) {
     ElMessage.error('操作失败')
   }
 }
 
-const handleSelectionChange = (selection: Student[]) => {
-  console.log('选中的学生:', selection)
+// 计算属性：根据城市ID获取城市名称
+const getCityName = (cityId: number) => {
+  const city = cities.value.find(c => c.id === cityId)
+  return city ? city.name : `城市${cityId}`
+}
+
+// 计算属性：根据班级ID获取班级名称
+const getClassName = (classId: number) => {
+  const classItem = classes.value.find(c => c.id === classId)
+  return classItem ? classItem.name : `班级${classId}`
+}
+
+// 计算属性：根据部门ID获取部门名称
+const getDepartmentName = (departmentId: number) => {
+  const department = departments.value.find(d => d.id === departmentId)
+  return department ? department.name : `部门${departmentId}`
+}
+
+// 计算属性：根据省份ID获取省份名称
+const getProvinceName = (provinceId: number) => {
+  const province = provinces.value.find(p => p.id === provinceId)
+  return province ? province.name : `省份${provinceId}`
+}
+
+// 计算属性：根据城市ID获取省份名称
+const getProvinceNameByCity = (cityId: number) => {
+  const city = cities.value.find(c => c.id === cityId)
+  if (city) {
+    const province = provinces.value.find(p => p.id === city.province_id)
+    return province ? province.name : `省份${city.province_id}`
+  }
+  return `省份-`
+}
+
+// 计算属性：根据班级ID获取部门名称
+const getDepartmentNameByClass = (classId: number) => {
+  const classItem = classes.value.find(c => c.id === classId)
+  if (classItem) {
+    const department = departments.value.find(d => d.id === classItem.department_id)
+    return department ? department.name : `部门${classItem.department_id}`
+  }
+  return `部门-`
+}
+
+const filteredCities = computed(() => {
+  if (!form.province_id) return [];
+  return cities.value.filter(city => city.province_id === form.province_id);
+})
+
+const filteredClasses = computed(() => {
+  if (!form.department_id) return [];
+  return classes.value.filter(classItem => classItem.department_id === form.department_id);
+})
+
+const onProvinceChange = () => {
+  form.city_id = '';
+}
+
+const onDepartmentChange = () => {
+  form.class_id = '';
+}
+
+// 分页处理函数
+const handleSizeChange = (val: number) => {
+  pagination.pageSize = val
+  pagination.currentPage = 1
+}
+
+const handleCurrentChange = (val: number) => {
+  pagination.currentPage = val
 }
 
 onMounted(() => {
   loadStudents()
+  loadCities()
+  loadClasses()
+  loadDepartments()
+  loadProvinces()
 })
 </script>
 
@@ -216,5 +474,11 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style> 
