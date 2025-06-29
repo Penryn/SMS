@@ -10,6 +10,8 @@
       :model="profile"
       label-width="100px"
       style="max-width: 600px"
+      :rules="rules"
+      ref="formRef"
     >
       <el-form-item label="姓名">
         <el-input v-model="profile.name" disabled />
@@ -20,10 +22,10 @@
       <el-form-item label="性别">
         <el-input v-model="profile.gender" disabled />
       </el-form-item>
-      <el-form-item label="电话">
+      <el-form-item label="电话" prop="phone">
         <el-input v-model="profile.phone" />
       </el-form-item>
-      <el-form-item label="邮箱">
+      <el-form-item label="邮箱" prop="email">
         <el-input v-model="profile.email" />
       </el-form-item>
       <el-form-item label="地址">
@@ -43,24 +45,42 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { studentApi } from '../../api/student'
+import { useAuthStore } from '../../stores/auth'
 
+const authStore = useAuthStore()
 const loading = ref(false)
 const profile = reactive({
+  id: '',
   name: '',
   student_id: '',
   gender: '',
   phone: '',
   email: '',
   address: '',
-  gpa: 0
+  gpa: 0,
+  city_id: '',
+  age: '',
 })
+const formRef = ref()
+const rules = {
+  phone: [
+    { required: true, message: '请输入电话', trigger: 'blur' },
+    { pattern: /^1[3-9]\d{9}$/, message: '电话格式不正确', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
+  ]
+}
 
 const loadProfile = async () => {
   loading.value = true
   try {
-    const response = await studentApi.getInfo()
-    if (response.code === 200) {
-      Object.assign(profile, response.data)
+    const studentId = authStore.user?.id
+    if (!studentId) throw new Error('未获取到学生ID')
+    const response = await studentApi.getStudent(studentId)
+    if (response.code === 200 && response.data?.student) {
+      Object.assign(profile, response.data.student)
     }
   } catch (error) {
     ElMessage.error('加载个人信息失败')
@@ -70,12 +90,19 @@ const loadProfile = async () => {
 }
 
 const saveProfile = async () => {
-  try {
-    await studentApi.updateInfo(profile)
-    ElMessage.success('保存成功')
-  } catch (error) {
-    ElMessage.error('保存失败')
-  }
+  formRef.value.validate(async (valid: boolean) => {
+    if (!valid) return
+    loading.value = true
+    try {
+      await studentApi.updateStudent(profile)
+      ElMessage.success('保存成功')
+      loadProfile()
+    } catch (error) {
+      ElMessage.error('保存失败')
+    } finally {
+      loading.value = false
+    }
+  })
 }
 
 onMounted(() => {

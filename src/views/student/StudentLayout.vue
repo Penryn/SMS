@@ -50,7 +50,7 @@
               <el-avatar :size="32" :src="userAvatar">
                 {{ authStore.user?.name?.charAt(0) }}
               </el-avatar>
-              <span class="username">{{ authStore.user?.name }}</span>
+              <span class="username">{{ username }}</span>
               <el-icon><ArrowDown /></el-icon>
             </span>
             <template #dropdown>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import {
@@ -90,6 +90,8 @@ const authStore = useAuthStore()
 const userAvatar = computed(() => {
   return ''
 })
+
+const username = computed(() => authStore.user?.username || '')
 
 const getCurrentPageTitle = () => {
   const routeMap: Record<string, string> = {
@@ -110,6 +112,8 @@ const handleCommand = async (command: string) => {
         type: 'warning'
       })
       authStore.logout()
+      localStorage.clear()
+      sessionStorage.clear()
       router.push('/login')
     } catch {
       // 用户取消
@@ -118,6 +122,14 @@ const handleCommand = async (command: string) => {
     router.push('/student/profile')
   }
 }
+
+// 侧边栏高亮与路由同步
+watch(
+  () => route.path,
+  (newPath) => {
+    // 这里可以做一些高亮处理，el-menu已自动处理
+  }
+)
 </script>
 
 <style scoped>
