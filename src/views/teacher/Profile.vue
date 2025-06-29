@@ -1,123 +1,83 @@
 <template>
   <div class="profile-page">
-    <el-row :gutter="20">
-      <el-col :span="16">
-        <el-card>
-          <template #header>
-            <div class="page-header">
-              <span>个人信息</span>
-              <el-button type="primary" @click="editMode = !editMode">
-                {{ editMode ? '取消编辑' : '编辑信息' }}
-              </el-button>
-            </div>
-          </template>
-          
-          <el-form
-            v-loading="loading"
-            :model="profile"
-            label-width="100px"
-            style="max-width: 600px"
-          >
-            <el-form-item label="姓名">
-              <el-input v-model="profile.name" disabled />
-            </el-form-item>
-            <el-form-item label="工号">
-              <el-input v-model="profile.teacher_id" disabled />
-            </el-form-item>
-            <el-form-item label="性别">
-              <el-input v-model="profile.gender" disabled />
-            </el-form-item>
-            <el-form-item label="年龄">
-              <el-input v-model="profile.age" disabled />
-            </el-form-item>
-            <el-form-item label="职称">
-              <el-input v-model="profile.title" disabled />
-            </el-form-item>
-            <el-form-item label="电话">
-              <el-input v-model="profile.phone" :disabled="!editMode" />
-            </el-form-item>
-            <el-form-item label="邮箱">
-              <el-input v-model="profile.email" :disabled="!editMode" />
-            </el-form-item>
-            <el-form-item label="是否管理员">
-              <el-input :value="profile.is_admin ? '是' : '否'" disabled />
-            </el-form-item>
-            <el-form-item v-if="editMode">
-              <el-button type="primary" @click="saveProfile">保存修改</el-button>
-              <el-button @click="cancelEdit">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
+    <el-card class="profile-card">
+      <template #header>
+        <div class="page-header">
+          <div class="header-content">
+            <el-icon class="header-icon"><User /></el-icon>
+            <span class="header-title">个人信息</span>
+          </div>
+        </div>
+      </template>
       
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <div class="page-header">
-              <span>统计信息</span>
-            </div>
-          </template>
-          
-          <div class="stats-info">
-            <div class="stat-item">
-              <div class="stat-label">授课课程数</div>
-              <div class="stat-value">{{ stats.courseCount }}</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">学生总数</div>
-              <div class="stat-value">{{ stats.studentCount }}</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">平均成绩</div>
-              <div class="stat-value">{{ stats.avgScore }}</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">授课班级数</div>
-              <div class="stat-value">{{ stats.classCount }}</div>
-            </div>
+      <div class="profile-content">
+        <div class="avatar-section">
+          <div class="avatar">
+            <el-icon><User /></el-icon>
           </div>
-        </el-card>
+          <div class="basic-info">
+            <div class="name-section">
+              <h3 class="teacher-name">{{ profile.name }}</h3>
+              <el-tag v-if="profile.is_admin" type="danger" size="small" class="admin-badge">
+                <el-icon><Star /></el-icon>
+                管理员
+              </el-tag>
+            </div>
+            <p class="teacher-title">{{ profile.title }}</p>
+          </div>
+        </div>
         
-        <el-card style="margin-top: 20px;">
-          <template #header>
-            <div class="page-header">
-              <span>快捷操作</span>
-            </div>
-          </template>
+        <el-divider />
+        
+        <el-form
+          v-loading="loading"
+          :model="profile"
+          label-width="100px"
+          class="profile-form"
+        >
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="工号">
+                <el-input v-model="profile.teacher_id" disabled class="info-input" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="性别">
+                <el-input :value="profile.gender === 'M' ? '男' : profile.gender === 'F' ? '女' : profile.gender" disabled class="info-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
           
-          <div class="quick-actions">
-            <el-button type="primary" @click="goToCourses" style="width: 100%; margin-bottom: 10px;">
-              我的课程
-            </el-button>
-            <el-button type="success" @click="goToStudents" style="width: 100%; margin-bottom: 10px;">
-              学生管理
-            </el-button>
-            <el-button type="info" @click="goToDashboard" style="width: 100%;">
-              <el-icon><DataBoard /></el-icon>
-              返回仪表盘
-            </el-button>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="年龄">
+                <el-input v-model="profile.age" disabled class="info-input" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="电话">
+                <el-input v-model="profile.phone" disabled class="info-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Reading, User, Document, DataBoard } from '@element-plus/icons-vue'
+import { User, Star } from '@element-plus/icons-vue'
 import { teacherApi } from '../../api/teacher'
 import type { Teacher } from '../../api/teacher'
 import { useAuthStore } from '../../stores/auth'
 
-const router = useRouter()
 const authStore = useAuthStore()
 const loading = ref(false)
-const editMode = ref(false)
 
-const profile = reactive<Teacher & { email: string }>({
+const profile = reactive<Teacher>({
   id: 0,
   teacher_id: '',
   name: '',
@@ -125,15 +85,7 @@ const profile = reactive<Teacher & { email: string }>({
   age: 0,
   title: '',
   phone: '',
-  email: '',
   is_admin: false
-})
-
-const stats = ref({
-  courseCount: 0,
-  studentCount: 0,
-  avgScore: '0',
-  classCount: 0
 })
 
 const loadProfile = async () => {
@@ -143,75 +95,14 @@ const loadProfile = async () => {
     if (!teacherId) return
 
     const response = await teacherApi.getTeacher(teacherId)
-    if (response.code === 0 && response.data.teacher) {
-      Object.assign(profile, response.data.teacher)
+    if (response.code === 0 && response.data) {
+      Object.assign(profile, response.data)
     }
-    
-    // 加载统计信息
-    await loadStats()
   } catch (error) {
     ElMessage.error('加载个人信息失败')
   } finally {
     loading.value = false
   }
-}
-
-const loadStats = async () => {
-  try {
-    const teacherId = authStore.user?.id
-    if (!teacherId) return
-
-    // 加载教师课程
-    const coursesResponse = await teacherApi.getCourse(teacherId)
-    if (coursesResponse.code === 0 && Array.isArray(coursesResponse.data.courses)) {
-      stats.value.courseCount = coursesResponse.data.courses.length
-    }
-    
-    // 加载课程平均成绩
-    const avgScoreResponse = await teacherApi.getCourseAvgScore(teacherId)
-    if (avgScoreResponse.code === 0 && Array.isArray(avgScoreResponse.data.avg_scores)) {
-      const avgScores = avgScoreResponse.data.avg_scores
-      if (avgScores.length > 0) {
-        const totalAvg = avgScores.reduce((sum: number, item: any) => sum + item.avg_score, 0)
-        stats.value.avgScore = (totalAvg / avgScores.length).toFixed(1)
-      }
-    }
-    
-    // 模拟其他数据
-    stats.value.studentCount = 120
-    stats.value.classCount = 8
-  } catch (error) {
-    console.error('加载统计信息失败:', error)
-  }
-}
-
-const saveProfile = async () => {
-  try {
-    // 这里应该调用更新API，但API文档中没有提供教师信息更新接口
-    // 暂时只更新本地状态
-    editMode.value = false
-    ElMessage.success('保存成功')
-  } catch (error) {
-    ElMessage.error('保存失败')
-  }
-}
-
-const cancelEdit = () => {
-  editMode.value = false
-  // 重新加载数据，取消修改
-  loadProfile()
-}
-
-const goToCourses = () => {
-  router.push('/teacher/courses')
-}
-
-const goToStudents = () => {
-  router.push('/teacher/students')
-}
-
-const goToDashboard = () => {
-  router.push('/teacher/dashboard')
 }
 
 onMounted(() => {
@@ -222,6 +113,10 @@ onMounted(() => {
 <style scoped>
 .profile-page {
   padding: 20px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .page-header {
@@ -230,41 +125,66 @@ onMounted(() => {
   align-items: center;
 }
 
-.stats-info {
-  padding: 10px 0;
+.profile-card {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.stat-item {
+.profile-content {
+  padding: 20px;
+}
+
+.avatar-section {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
 }
 
-.stat-item:last-child {
-  border-bottom: none;
-}
-
-.stat-label {
-  color: #666;
-  font-size: 14px;
-}
-
-.stat-value {
-  font-size: 18px;
-  font-weight: bold;
-  color: #409EFF;
-}
-
-.quick-actions {
-  padding: 10px 0;
-}
-
-.quick-actions .el-button {
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  margin-right: 20px;
+}
+
+.basic-info {
+  flex: 1;
+}
+
+.name-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.teacher-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.teacher-title {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #606266;
+}
+
+.profile-form {
+  margin-top: 20px;
+}
+
+.info-input {
+  width: 100%;
 }
 </style> 

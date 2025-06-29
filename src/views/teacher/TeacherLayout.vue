@@ -2,8 +2,8 @@
   <div class="layout-root">
     <aside class="sidebar">
       <div class="logo">
-        <h2>教师管理系统</h2>
-        <p>Teacher Management</p>
+        <h2>学生管理系统</h2>
+        <p>教师端</p>
       </div>
       
       <el-menu
@@ -24,7 +24,7 @@
           <span>课程管理</span>
         </el-menu-item>
         
-        <el-menu-item index="/teacher/students">
+        <el-menu-item index="/teacher/students" disabled>
           <el-icon><User /></el-icon>
           <span>学生管理</span>
         </el-menu-item>
