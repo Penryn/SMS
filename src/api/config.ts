@@ -1,0 +1,64 @@
+import axios from 'axios';
+import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+
+// API基础配置 - 使用相对路径，通过Vite代理访问
+export const BASE_URL = '';
+
+// 备用API地址（如果代理不工作）
+export const FALLBACK_BASE_URL = 'http://121.43.236.83:8888';
+
+// 创建axios实例
+const api: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// 请求拦截器
+api.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    // 从localStorage获取token
+    const token = localStorage.getItem('token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    // 在开发环境中添加调试信息
+    if (import.meta.env.DEV) {
+      console.log('API请求:', config.method?.toUpperCase(), config.url);
+    }
+    
+    return config;
+  },
+  (error) => {
+    console.error('请求拦截器错误:', error);
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
+api.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response.data;
+  },
+  (error) => {
+    console.error('API请求错误:', error);
+    
+    // 如果是CORS错误，提供友好的错误信息
+    if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
+      console.error('CORS错误，请检查代理配置或API服务器设置');
+    }
+    
+    if (error.response?.status === 401) {
+      // 未授权，清除token并跳转到登录页
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api; 

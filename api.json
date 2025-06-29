@@ -1,0 +1,4785 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/admin/avg/score": {
+      "get": {
+        "summary": "获取每门课程平均成绩接口",
+        "operationId": "GetAvgScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAvgScoreResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/cities": {
+      "get": {
+        "summary": "获取城市列表接口",
+        "operationId": "GetCityList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCityListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "province_id",
+            "description": " 省份ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/city/gpa/top/ten/count": {
+      "get": {
+        "summary": "获取各生源地在各专业绩点前十的数量",
+        "operationId": "GetCityGpaTopTenCount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCityGpaTopTenCountResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/city/student/count": {
+      "get": {
+        "summary": "各生源地招收学生数量",
+        "operationId": "GetCityStudentCount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCityStudentCountResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/class": {
+      "get": {
+        "summary": "获取班级信息接口",
+        "operationId": "GetClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetClassResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "class_id",
+            "description": " 班级ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除班级接口",
+        "operationId": "DeleteClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteClassReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建班级接口",
+        "operationId": "CreateClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 班级相关",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateClassReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新班级接口",
+        "operationId": "UpdateClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateClassReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/class/course": {
+      "get": {
+        "summary": "获取班级的课程列表",
+        "operationId": "GetClassCourseList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "class_id",
+            "description": " 班级ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "school_year",
+            "description": " 学年，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "semester",
+            "description": " 学期，可选",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/classes": {
+      "get": {
+        "summary": "获取班级列表接口",
+        "operationId": "GetClassList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetClassListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "department_id",
+            "description": " 所属专业ID，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/course": {
+      "get": {
+        "summary": "获取课程信息接口",
+        "operationId": "GetCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseByAdminResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "id",
+            "description": " 课程ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除课程接口",
+        "operationId": "DeleteCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteCourseReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建课程接口",
+        "operationId": "CreateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 课程相关",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCourseReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新课程接口",
+        "operationId": "UpdateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCourseReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/course/score/distribution": {
+      "get": {
+        "summary": "获取课程分数分布接口",
+        "operationId": "GetCourseScoreDistribution",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseScoreDistributionResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "course_id",
+            "description": " 课程ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "school_year",
+            "description": " 学年",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/course/student/score": {
+      "get": {
+        "summary": "获取某学年某个相同课程名的课程的所有学生成绩总览",
+        "operationId": "GetCourseAllStudentScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseAllStudentScoreResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "course_name",
+            "description": " 课程名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "school_year",
+            "description": " 学年",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/courses": {
+      "get": {
+        "summary": "获取课程列表接口",
+        "operationId": "GetCourseList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "class_id",
+            "description": " 归属班级，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/department": {
+      "get": {
+        "summary": "获取部门信息接口",
+        "operationId": "GetDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetDepartmentResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "department_id",
+            "description": " 部门ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除部门接口",
+        "operationId": "DeleteDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteDepartmentReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建部门接口",
+        "operationId": "CreateDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateDepartmentReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新部门接口",
+        "operationId": "UpdateDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateDepartmentReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/department/gpa/rank": {
+      "get": {
+        "summary": "获取GPA排名接口",
+        "operationId": "GetDepartmentGpaRank",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetGPARankResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "department_id",
+            "description": " 对象ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "type",
+            "description": " 排名类型 1:专业 2:班级",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/departments": {
+      "get": {
+        "summary": "获取部门列表接口",
+        "operationId": "GetDepartmentList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetDepartmentListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/provinces": {
+      "get": {
+        "summary": "获取省份列表接口",
+        "operationId": "GetProvinceList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProvinceListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/student": {
+      "get": {
+        "summary": "获取学生信息接口",
+        "operationId": "GetStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetStudentByAdminResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "id",
+            "description": " 学生表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除学生接口",
+        "operationId": "DeleteStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteStudentReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建学生接口",
+        "operationId": "CreateStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 学生相关",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateStudentReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新学生接口",
+        "operationId": "UpdateStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateStudentByAdminReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/students": {
+      "get": {
+        "summary": "获取学生列表接口",
+        "operationId": "GetStudentList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetStudentListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "class_id",
+            "description": " 班级ID，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teacher": {
+      "get": {
+        "summary": "获取教师信息接口",
+        "operationId": "GetTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeacherByAdminResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "id",
+            "description": " 教师表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除教师接口",
+        "operationId": "DeleteTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteTeacherReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建教师接口",
+        "operationId": "CreateTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 教师相关",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateTeacherReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新教师接口",
+        "operationId": "UpdateTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateTeacherReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teacher/course": {
+      "get": {
+        "summary": "获取教师教授的课程列表",
+        "operationId": "GetTeacherCourseList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "teacher_id",
+            "description": " 教师工号",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "school_year",
+            "description": " 学年，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "semester",
+            "description": " 学期，可选",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teacher/statistics": {
+      "get": {
+        "summary": "获取教师授课统计",
+        "operationId": "GetTeacherStatistics",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeacherStatisticsResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teachers": {
+      "get": {
+        "summary": "获取教师列表接口",
+        "operationId": "GetTeacherList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeacherListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teaching": {
+      "get": {
+        "summary": "获取授课信息接口",
+        "operationId": "GetTeaching",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeachingResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "id",
+            "description": " 授课表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "delete": {
+        "summary": "删除授课接口",
+        "operationId": "DeleteTeaching",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteTeachingReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "summary": "创建授课接口",
+        "operationId": "CreateTeaching",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 授课相关",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateTeachingReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "summary": "更新授课接口",
+        "operationId": "UpdateTeaching",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateTeachingReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/teachings": {
+      "get": {
+        "summary": "获取授课列表接口",
+        "operationId": "GetTeachingList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeachingListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "description": " 管理员ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "teacher_id",
+            "description": " 教师工号，可选",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "course_id",
+            "description": " 课程ID，可选",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/login": {
+      "post": {
+        "summary": "用户登录接口",
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/student/class/course": {
+      "get": {
+        "summary": "获取班级课程列表接口",
+        "operationId": "GetClassCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "class_id",
+            "description": " 班级ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "semester",
+            "description": " 学期",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "student_id",
+            "description": " 学生ID 如果传了代表查询该学生的可选课程",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      }
+    },
+    "/api/student/course/select": {
+      "post": {
+        "summary": "学生选课接口",
+        "operationId": "SelectCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SelectCourseReq"
+            }
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      }
+    },
+    "/api/student/info": {
+      "get": {
+        "summary": "获取学生信息接口",
+        "operationId": "GetStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetStudentResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 学生ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      },
+      "put": {
+        "summary": "修改学生信息接口",
+        "operationId": "UpdateStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateStudentReq"
+            }
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      }
+    },
+    "/api/student/score": {
+      "get": {
+        "summary": "获取学生课程成绩接口",
+        "operationId": "GetStudentScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetStudentScoreResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 学生ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      }
+    },
+    "/api/student/teacher/course": {
+      "get": {
+        "summary": "获取教师课程列表接口",
+        "operationId": "GetTeacherCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "semester",
+            "description": " 学期",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "student"
+        ]
+      }
+    },
+    "/api/teacher": {
+      "get": {
+        "summary": "获取教师信息",
+        "operationId": "GetTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeacherResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/course": {
+      "get": {
+        "summary": "获取教师所授课程",
+        "operationId": "GetTeacherCourseByTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseByTeacherResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "semester",
+            "description": " 学期",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/course/avgscore": {
+      "get": {
+        "summary": "获取教师所授课程平均成绩",
+        "operationId": "GetCourseAvgScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetTeacherCourseAvgScoreResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/course/rank": {
+      "get": {
+        "summary": "获取教师所授课程成绩排名",
+        "operationId": "GetCourseRank",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetCourseRankResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "course_id",
+            "description": " 课程ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "semester",
+            "description": " 学期",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/course/student": {
+      "get": {
+        "summary": "获取教师所授课程下的学生列表",
+        "operationId": "GetCourseStudentList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "course_id",
+            "description": " 课程ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "year",
+            "description": " 学年",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "semester",
+            "description": " 学期",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/course/student/score": {
+      "post": {
+        "summary": "设置学生成绩",
+        "operationId": "SetStudentScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetStudentScoreReq"
+            }
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    },
+    "/api/teacher/student": {
+      "get": {
+        "summary": "获取教师所授课程下的学生信息",
+        "operationId": "GetStudentByTeacher",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetStudentByTeacherResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teacher_id",
+            "description": " 教师ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "student_id",
+            "description": " 学生ID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "teacher"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CityItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 城市名称"
+        },
+        "province_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属省份ID"
+        }
+      },
+      "title": "CityItem",
+      "required": [
+        "id",
+        "name",
+        "province_id"
+      ]
+    },
+    "ClassListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属专业ID"
+        }
+      },
+      "title": "ClassListItem",
+      "required": [
+        "id",
+        "name",
+        "department_id"
+      ]
+    },
+    "CourseList": {
+      "type": "object",
+      "properties": {
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "credits": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课时"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考试类型 1:考试 2:考查"
+        },
+        "teachers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TeacherList"
+          },
+          "description": " 教师列表"
+        }
+      },
+      "title": "CourseList",
+      "required": [
+        "course_id",
+        "course_name",
+        "credits",
+        "year",
+        "semester",
+        "hours",
+        "exam_type",
+        "teachers"
+      ]
+    },
+    "CourseListByTeacher": {
+      "type": "object",
+      "properties": {
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "credits": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课时"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考试类型 1:考试 2:考查"
+        },
+        "teachers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TeacherListByTeacher"
+          },
+          "description": " 教师列表"
+        }
+      },
+      "title": "CourseListByTeacher",
+      "required": [
+        "course_id",
+        "course_name",
+        "credits",
+        "year",
+        "semester",
+        "hours",
+        "exam_type",
+        "teachers"
+      ]
+    },
+    "CourseListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 开课年份"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 开课学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学时"
+        },
+        "credit": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 归属班级"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考核方式"
+        }
+      },
+      "title": "CourseListItem",
+      "required": [
+        "id",
+        "name",
+        "school_year",
+        "semester",
+        "hours",
+        "credit",
+        "class_id",
+        "exam_type"
+      ]
+    },
+    "CourseRank": {
+      "type": "object",
+      "properties": {
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 成绩"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID"
+        },
+        "student_name": {
+          "type": "string",
+          "description": " 学生姓名"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "class_name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        },
+        "rank": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 排名"
+        }
+      },
+      "title": "CourseRank",
+      "required": [
+        "course_id",
+        "course_name",
+        "score",
+        "student_id",
+        "student_name",
+        "class_id",
+        "class_name",
+        "school_year",
+        "semester",
+        "rank"
+      ]
+    },
+    "CreateClassReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属专业ID"
+        }
+      },
+      "title": "CreateClassReq",
+      "required": [
+        "admin_id",
+        "name",
+        "department_id"
+      ]
+    },
+    "CreateCourseReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 开课年份"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 开课学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学时"
+        },
+        "credit": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 归属班级"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考核方式"
+        }
+      },
+      "title": "CreateCourseReq",
+      "required": [
+        "admin_id",
+        "name",
+        "school_year",
+        "semester",
+        "hours",
+        "credit",
+        "class_id",
+        "exam_type"
+      ]
+    },
+    "CreateDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 部门名称"
+        }
+      },
+      "title": "CreateDepartmentReq",
+      "required": [
+        "admin_id",
+        "name"
+      ]
+    },
+    "CreateScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 分数"
+        }
+      },
+      "title": "CreateScoreReq",
+      "required": [
+        "admin_id",
+        "student_id",
+        "course_id",
+        "score"
+      ]
+    },
+    "CreateStudentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "CreateStudentReq",
+      "required": [
+        "admin_id",
+        "student_id",
+        "password",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id"
+      ]
+    },
+    "CreateTeacherReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "title": {
+          "type": "string",
+          "description": " 职称"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 联系电话"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否管理员"
+        }
+      },
+      "title": "CreateTeacherReq",
+      "required": [
+        "admin_id",
+        "teacher_id",
+        "password",
+        "name",
+        "gender",
+        "age",
+        "title",
+        "phone",
+        "is_admin"
+      ]
+    },
+    "CreateTeachingReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "CreateTeachingReq",
+      "required": [
+        "admin_id",
+        "teacher_id",
+        "course_id"
+      ]
+    },
+    "DeleteClassReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "DeleteClassReq",
+      "required": [
+        "admin_id",
+        "class_id"
+      ]
+    },
+    "DeleteCourseReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "DeleteCourseReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "DeleteDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 部门ID"
+        }
+      },
+      "title": "DeleteDepartmentReq",
+      "required": [
+        "admin_id",
+        "department_id"
+      ]
+    },
+    "DeleteScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 成绩表主键"
+        }
+      },
+      "title": "DeleteScoreReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "DeleteStudentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生表主键"
+        }
+      },
+      "title": "DeleteStudentReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "DeleteTeacherReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师表主键"
+        }
+      },
+      "title": "DeleteTeacherReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "DeleteTeachingReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 授课表主键"
+        }
+      },
+      "title": "DeleteTeachingReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "DepartmentListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 部门名称"
+        }
+      },
+      "title": "DepartmentListItem",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "GPARankItem": {
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 排名"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID"
+        },
+        "student_name": {
+          "type": "string",
+          "description": " 学生姓名"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "class_name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "gpa": {
+          "type": "number",
+          "format": "double",
+          "description": " 平均GPA"
+        }
+      },
+      "title": "GPARankItem",
+      "required": [
+        "rank",
+        "student_id",
+        "student_name",
+        "class_id",
+        "class_name",
+        "gpa"
+      ]
+    },
+    "GetAvgScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetAvgScoreReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetAvgScoreResp": {
+      "type": "object",
+      "properties": {
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "avg_score": {
+          "type": "number",
+          "format": "double",
+          "description": " 平均成绩"
+        }
+      },
+      "title": "GetAvgScoreResp",
+      "required": [
+        "course_id",
+        "course_name",
+        "school_year",
+        "avg_score"
+      ]
+    },
+    "GetCityGpaTopTenCountReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetCityGpaTopTenCountReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetCityGpaTopTenCountResp": {
+      "type": "object",
+      "properties": {
+        "province_name": {
+          "type": "string",
+          "description": " 省份名称"
+        },
+        "department_name": {
+          "type": "string",
+          "description": " 专业名称"
+        },
+        "top_ten_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 前十名数量"
+        }
+      },
+      "title": "GetCityGpaTopTenCountResp",
+      "required": [
+        "province_name",
+        "department_name",
+        "top_ten_count"
+      ]
+    },
+    "GetCityListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "province_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 省份ID"
+        }
+      },
+      "title": "GetCityListReq",
+      "required": [
+        "admin_id",
+        "province_id"
+      ]
+    },
+    "GetCityListResp": {
+      "type": "object",
+      "properties": {
+        "cities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CityItem"
+          },
+          "description": " 城市列表"
+        }
+      },
+      "title": "GetCityListResp",
+      "required": [
+        "cities"
+      ]
+    },
+    "GetCityStudentCountReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetCityStudentCountReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetCityStudentCountResp": {
+      "type": "object",
+      "properties": {
+        "province_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 省份ID"
+        },
+        "province_name": {
+          "type": "string",
+          "description": " 省份名称"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "city_name": {
+          "type": "string",
+          "description": " 城市名称"
+        },
+        "student_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生数量"
+        }
+      },
+      "title": "GetCityStudentCountResp",
+      "required": [
+        "province_id",
+        "province_name",
+        "city_id",
+        "city_name",
+        "student_count"
+      ]
+    },
+    "GetClassCourseListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学年，可选"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 学期，可选"
+        }
+      },
+      "title": "GetClassCourseListReq",
+      "required": [
+        "admin_id",
+        "class_id",
+        "school_year",
+        "semester"
+      ]
+    },
+    "GetClassCourseReq": {
+      "type": "object",
+      "properties": {
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID 如果传了代表查询该学生的可选课程"
+        }
+      },
+      "title": "GetClassCourseReq",
+      "required": [
+        "class_id",
+        "student_id"
+      ]
+    },
+    "GetClassListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属专业ID，可选"
+        }
+      },
+      "title": "GetClassListReq",
+      "required": [
+        "admin_id",
+        "department_id"
+      ]
+    },
+    "GetClassListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClassListItem"
+          },
+          "description": " 班级列表"
+        }
+      },
+      "title": "GetClassListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetClassReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "GetClassReq",
+      "required": [
+        "admin_id",
+        "class_id"
+      ]
+    },
+    "GetClassResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属专业ID"
+        }
+      },
+      "title": "GetClassResp",
+      "required": [
+        "id",
+        "name",
+        "department_id"
+      ]
+    },
+    "GetCourseAllStudentScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        }
+      },
+      "title": "GetCourseAllStudentScoreReq",
+      "required": [
+        "admin_id",
+        "course_name",
+        "school_year"
+      ]
+    },
+    "GetCourseAllStudentScoreResp": {
+      "type": "object",
+      "properties": {
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StudentScoreItem"
+          },
+          "description": " 学生成绩列表"
+        }
+      },
+      "title": "GetCourseAllStudentScoreResp",
+      "required": [
+        "scores"
+      ]
+    },
+    "GetCourseAvgScoreReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        }
+      },
+      "title": "GetCourseAvgScoreReq",
+      "required": [
+        "teacher_id"
+      ]
+    },
+    "GetCourseByAdminResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 开课年份"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 开课学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学时"
+        },
+        "credit": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 归属班级"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考核方式"
+        }
+      },
+      "title": "GetCourseByAdminResp",
+      "required": [
+        "id",
+        "name",
+        "school_year",
+        "semester",
+        "hours",
+        "credit",
+        "class_id",
+        "exam_type"
+      ]
+    },
+    "GetCourseByTeacherResp": {
+      "type": "object",
+      "properties": {
+        "courses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CourseListByTeacher"
+          },
+          "description": " 课程列表"
+        }
+      },
+      "title": "GetCourseByTeacherResp",
+      "required": [
+        "courses"
+      ]
+    },
+    "GetCourseListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 归属班级，可选"
+        }
+      },
+      "title": "GetCourseListReq",
+      "required": [
+        "admin_id",
+        "class_id"
+      ]
+    },
+    "GetCourseListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CourseListItem"
+          },
+          "description": " 课程列表"
+        }
+      },
+      "title": "GetCourseListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetCourseRankReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        }
+      },
+      "title": "GetCourseRankReq",
+      "required": [
+        "teacher_id",
+        "course_id",
+        "year",
+        "semester"
+      ]
+    },
+    "GetCourseRankResp": {
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CourseRank"
+          },
+          "description": " 课程成绩排名"
+        }
+      },
+      "title": "GetCourseRankResp",
+      "required": [
+        "rank"
+      ]
+    },
+    "GetCourseReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "GetCourseReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "GetCourseResp": {
+      "type": "object",
+      "properties": {
+        "courses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CourseList"
+          },
+          "description": " 课程列表"
+        }
+      },
+      "title": "GetCourseResp",
+      "required": [
+        "courses"
+      ]
+    },
+    "GetCourseScoreDistributionReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学年"
+        }
+      },
+      "title": "GetCourseScoreDistributionReq",
+      "required": [
+        "admin_id",
+        "course_id",
+        "school_year"
+      ]
+    },
+    "GetCourseScoreDistributionResp": {
+      "type": "object",
+      "properties": {
+        "distribution": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScoreDistributionItem"
+          },
+          "description": " 成绩分布"
+        }
+      },
+      "title": "GetCourseScoreDistributionResp",
+      "required": [
+        "distribution"
+      ]
+    },
+    "GetCourseStudentListReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        }
+      },
+      "title": "GetCourseStudentListReq",
+      "required": [
+        "teacher_id",
+        "course_id"
+      ]
+    },
+    "GetCourseStudentListResp": {
+      "type": "object",
+      "properties": {
+        "students": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GetStudentByTeacherResp"
+          },
+          "description": " 学生列表"
+        }
+      },
+      "title": "GetCourseStudentListResp",
+      "required": [
+        "students"
+      ]
+    },
+    "GetDepartmentListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetDepartmentListReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetDepartmentListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DepartmentListItem"
+          },
+          "description": " 部门列表"
+        }
+      },
+      "title": "GetDepartmentListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 部门ID"
+        }
+      },
+      "title": "GetDepartmentReq",
+      "required": [
+        "admin_id",
+        "department_id"
+      ]
+    },
+    "GetDepartmentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 部门名称"
+        }
+      },
+      "title": "GetDepartmentResp",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "GetGPARankResp": {
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GPARankItem"
+          },
+          "description": " GPA排名"
+        }
+      },
+      "title": "GetGPARankResp",
+      "required": [
+        "rank"
+      ]
+    },
+    "GetGpaRankReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 对象ID"
+        },
+        "type": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 排名类型 1:专业 2:班级"
+        }
+      },
+      "title": "GetGpaRankReq",
+      "required": [
+        "admin_id",
+        "department_id",
+        "type"
+      ]
+    },
+    "GetProvinceListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetProvinceListReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetProvinceListResp": {
+      "type": "object",
+      "properties": {
+        "provinces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProvinceItem"
+          },
+          "description": " 省份列表"
+        }
+      },
+      "title": "GetProvinceListResp",
+      "required": [
+        "provinces"
+      ]
+    },
+    "GetScoreListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号，可选"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID，可选"
+        }
+      },
+      "title": "GetScoreListReq",
+      "required": [
+        "admin_id",
+        "student_id",
+        "course_id"
+      ]
+    },
+    "GetScoreListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScoreListItem"
+          },
+          "description": " 成绩列表"
+        }
+      },
+      "title": "GetScoreListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 成绩表主键"
+        }
+      },
+      "title": "GetScoreReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "GetScoreResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 成绩表主键"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 分数"
+        }
+      },
+      "title": "GetScoreResp",
+      "required": [
+        "id",
+        "student_id",
+        "course_id",
+        "score"
+      ]
+    },
+    "GetStudentByAdminReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生表主键"
+        }
+      },
+      "title": "GetStudentByAdminReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "GetStudentByAdminResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生表主键"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "GetStudentByAdminResp",
+      "required": [
+        "id",
+        "student_id",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id"
+      ]
+    },
+    "GetStudentByTeacherReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID"
+        }
+      },
+      "title": "GetStudentByTeacherReq",
+      "required": [
+        "teacher_id",
+        "student_id"
+      ]
+    },
+    "GetStudentByTeacherResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 生源地城市编号"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属班级编号"
+        },
+        "gpa": {
+          "type": "number",
+          "format": "double",
+          "description": " 学生平均绩点"
+        },
+        "total_credits": {
+          "type": "number",
+          "format": "double",
+          "description": " 已修总学分"
+        }
+      },
+      "title": "GetStudentByTeacherResp",
+      "required": [
+        "id",
+        "student_id",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id",
+        "gpa",
+        "total_credits"
+      ]
+    },
+    "GetStudentListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID，可选"
+        }
+      },
+      "title": "GetStudentListReq",
+      "required": [
+        "admin_id",
+        "class_id"
+      ]
+    },
+    "GetStudentListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StudentListItem"
+          },
+          "description": " 学生列表"
+        }
+      },
+      "title": "GetStudentListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetStudentReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生ID"
+        }
+      },
+      "title": "GetStudentReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetStudentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 生源地城市编号"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属班级编号"
+        },
+        "gpa": {
+          "type": "number",
+          "format": "double",
+          "description": " 学生平均绩点"
+        },
+        "total_credits": {
+          "type": "number",
+          "format": "double",
+          "description": " 已修总学分"
+        }
+      },
+      "title": "GetStudentResp",
+      "required": [
+        "id",
+        "student_id",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id",
+        "gpa",
+        "total_credits"
+      ]
+    },
+    "GetStudentScoreReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        }
+      },
+      "title": "GetStudentScoreReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetStudentScoreResp": {
+      "type": "object",
+      "properties": {
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScoreList"
+          },
+          "description": " 成绩列表"
+        }
+      },
+      "title": "GetStudentScoreResp",
+      "required": [
+        "scores"
+      ]
+    },
+    "GetTeacherByAdminReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师表主键"
+        }
+      },
+      "title": "GetTeacherByAdminReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "GetTeacherByAdminResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师表主键"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "title": {
+          "type": "string",
+          "description": " 职称"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 联系电话"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否管理员"
+        }
+      },
+      "title": "GetTeacherByAdminResp",
+      "required": [
+        "id",
+        "teacher_id",
+        "name",
+        "gender",
+        "age",
+        "title",
+        "phone",
+        "is_admin"
+      ]
+    },
+    "GetTeacherCourseAvgScoreResp": {
+      "type": "object",
+      "properties": {
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "class_name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "avg_score": {
+          "type": "number",
+          "format": "double",
+          "description": " 平均成绩"
+        }
+      },
+      "title": "GetTeacherCourseAvgScoreResp",
+      "required": [
+        "course_name",
+        "class_name",
+        "school_year",
+        "avg_score"
+      ]
+    },
+    "GetTeacherCourseByTeacherReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        }
+      },
+      "title": "GetTeacherCourseByTeacherReq",
+      "required": [
+        "teacher_id"
+      ]
+    },
+    "GetTeacherCourseListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学年，可选"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 学期，可选"
+        }
+      },
+      "title": "GetTeacherCourseListReq",
+      "required": [
+        "admin_id",
+        "teacher_id",
+        "school_year",
+        "semester"
+      ]
+    },
+    "GetTeacherCourseReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学期"
+        }
+      },
+      "title": "GetTeacherCourseReq",
+      "required": [
+        "teacher_id"
+      ]
+    },
+    "GetTeacherListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetTeacherListReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetTeacherListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TeacherListItem"
+          },
+          "description": " 教师列表"
+        }
+      },
+      "title": "GetTeacherListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetTeacherReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        }
+      },
+      "title": "GetTeacherReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetTeacherResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 主键ID"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 工号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "title": {
+          "type": "string",
+          "description": " 职称"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 电话"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否管理员"
+        }
+      },
+      "title": "GetTeacherResp",
+      "required": [
+        "id",
+        "teacher_id",
+        "name",
+        "gender",
+        "age",
+        "title",
+        "phone",
+        "is_admin"
+      ]
+    },
+    "GetTeacherStatisticsReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        }
+      },
+      "title": "GetTeacherStatisticsReq",
+      "required": [
+        "admin_id"
+      ]
+    },
+    "GetTeacherStatisticsResp": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "teacher_name": {
+          "type": "string",
+          "description": " 教师姓名"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学年"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 学期"
+        },
+        "student_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生数"
+        },
+        "avg_score": {
+          "type": "number",
+          "format": "double",
+          "description": " 平均成绩"
+        }
+      },
+      "title": "GetTeacherStatisticsResp",
+      "required": [
+        "teacher_id",
+        "teacher_name",
+        "course_id",
+        "course_name",
+        "school_year",
+        "semester",
+        "student_count",
+        "avg_score"
+      ]
+    },
+    "GetTeachingListReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号，可选"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID，可选"
+        }
+      },
+      "title": "GetTeachingListReq",
+      "required": [
+        "admin_id",
+        "teacher_id",
+        "course_id"
+      ]
+    },
+    "GetTeachingListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TeachingListItem"
+          },
+          "description": " 授课列表"
+        }
+      },
+      "title": "GetTeachingListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "GetTeachingReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 授课表主键"
+        }
+      },
+      "title": "GetTeachingReq",
+      "required": [
+        "admin_id",
+        "id"
+      ]
+    },
+    "GetTeachingResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 授课表主键"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "GetTeachingResp",
+      "required": [
+        "id",
+        "teacher_id",
+        "course_id"
+      ]
+    },
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": " 用户名"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        },
+        "user_type": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 用户类型 1:学生 2:教师 3:管理员"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "username",
+        "password",
+        "user_type"
+      ]
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 用户ID"
+        },
+        "user_type": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 用户类型 1:学生 2:教师 3:管理员"
+        }
+      },
+      "title": "LoginResp",
+      "required": [
+        "id",
+        "user_type"
+      ]
+    },
+    "ProvinceItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 省份ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 省份名称"
+        }
+      },
+      "title": "ProvinceItem",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ScoreDistributionItem": {
+      "type": "object",
+      "properties": {
+        "score_range": {
+          "type": "string",
+          "description": " 分数范围"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 该分数范围内的学生数量"
+        }
+      },
+      "title": "ScoreDistributionItem",
+      "required": [
+        "score_range",
+        "count"
+      ]
+    },
+    "ScoreList": {
+      "type": "object",
+      "properties": {
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 成绩"
+        },
+        "credits": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "retake_required": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否需要重修"
+        }
+      },
+      "title": "ScoreList",
+      "required": [
+        "course_id",
+        "course_name",
+        "score",
+        "credits",
+        "retake_required"
+      ]
+    },
+    "ScoreListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 成绩表主键"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 分数"
+        }
+      },
+      "title": "ScoreListItem",
+      "required": [
+        "id",
+        "student_id",
+        "course_id",
+        "score"
+      ]
+    },
+    "SelectCourseReq": {
+      "type": "object",
+      "properties": {
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "SelectCourseReq",
+      "required": [
+        "student_id",
+        "course_id"
+      ]
+    },
+    "SetStudentScoreReq": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学生ID"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 成绩"
+        }
+      },
+      "title": "SetStudentScoreReq",
+      "required": [
+        "teacher_id",
+        "student_id",
+        "course_id",
+        "score"
+      ]
+    },
+    "StudentListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生表主键"
+        },
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "StudentListItem",
+      "required": [
+        "id",
+        "student_id",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id"
+      ]
+    },
+    "StudentScoreItem": {
+      "type": "object",
+      "properties": {
+        "student_id": {
+          "type": "string",
+          "description": " 学号"
+        },
+        "student_name": {
+          "type": "string",
+          "description": " 学生姓名"
+        },
+        "course_name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 学期"
+        },
+        "class_name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "teacher_name": {
+          "type": "string",
+          "description": " 教师姓名"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 分数"
+        }
+      },
+      "title": "StudentScoreItem",
+      "required": [
+        "student_id",
+        "student_name",
+        "course_name",
+        "semester",
+        "class_name",
+        "teacher_name",
+        "score"
+      ]
+    },
+    "TeacherList": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "teacher_name": {
+          "type": "string",
+          "description": " 教师姓名"
+        }
+      },
+      "title": "TeacherList",
+      "required": [
+        "teacher_id",
+        "teacher_name"
+      ]
+    },
+    "TeacherListByTeacher": {
+      "type": "object",
+      "properties": {
+        "teacher_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师ID"
+        },
+        "teacher_name": {
+          "type": "string",
+          "description": " 教师姓名"
+        }
+      },
+      "title": "TeacherListByTeacher",
+      "required": [
+        "teacher_id",
+        "teacher_name"
+      ]
+    },
+    "TeacherListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师表主键"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "title": {
+          "type": "string",
+          "description": " 职称"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 联系电话"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否管理员"
+        }
+      },
+      "title": "TeacherListItem",
+      "required": [
+        "id",
+        "teacher_id",
+        "name",
+        "gender",
+        "age",
+        "title",
+        "phone",
+        "is_admin"
+      ]
+    },
+    "TeachingListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 授课表主键"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "TeachingListItem",
+      "required": [
+        "id",
+        "teacher_id",
+        "course_id"
+      ]
+    },
+    "UpdateClassReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 班级名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 所属专业ID"
+        }
+      },
+      "title": "UpdateClassReq",
+      "required": [
+        "admin_id",
+        "class_id",
+        "name",
+        "department_id"
+      ]
+    },
+    "UpdateCourseReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 课程名称"
+        },
+        "school_year": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 开课年份"
+        },
+        "semester": {
+          "type": "string",
+          "description": " 开课学期"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 学时"
+        },
+        "credit": {
+          "type": "number",
+          "format": "double",
+          "description": " 学分"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 归属班级"
+        },
+        "exam_type": {
+          "type": "string",
+          "description": " 考核方式"
+        }
+      },
+      "title": "UpdateCourseReq",
+      "required": [
+        "admin_id",
+        "id",
+        "name",
+        "school_year",
+        "semester",
+        "hours",
+        "credit",
+        "class_id",
+        "exam_type"
+      ]
+    },
+    "UpdateDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": " 部门名称"
+        }
+      },
+      "title": "UpdateDepartmentReq",
+      "required": [
+        "admin_id",
+        "department_id",
+        "name"
+      ]
+    },
+    "UpdateScoreReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 成绩表主键"
+        },
+        "score": {
+          "type": "number",
+          "format": "double",
+          "description": " 分数"
+        }
+      },
+      "title": "UpdateScoreReq",
+      "required": [
+        "admin_id",
+        "id",
+        "score"
+      ]
+    },
+    "UpdateStudentByAdminReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生表主键"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        },
+        "class_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 班级ID"
+        }
+      },
+      "title": "UpdateStudentByAdminReq",
+      "required": [
+        "admin_id",
+        "id",
+        "name",
+        "gender",
+        "age",
+        "city_id",
+        "class_id"
+      ]
+    },
+    "UpdateStudentReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 学生ID 用来指定要更新的学生"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 年龄"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 城市ID"
+        }
+      },
+      "title": "UpdateStudentReq",
+      "required": [
+        "id",
+        "name",
+        "gender",
+        "age",
+        "city_id"
+      ]
+    },
+    "UpdateTeacherReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 教师表主键"
+        },
+        "name": {
+          "type": "string",
+          "description": " 姓名"
+        },
+        "gender": {
+          "type": "string",
+          "description": " 性别"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 年龄"
+        },
+        "title": {
+          "type": "string",
+          "description": " 职称"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 联系电话"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": " 是否管理员"
+        }
+      },
+      "title": "UpdateTeacherReq",
+      "required": [
+        "admin_id",
+        "id",
+        "name",
+        "gender",
+        "age",
+        "title",
+        "phone",
+        "is_admin"
+      ]
+    },
+    "UpdateTeachingReq": {
+      "type": "object",
+      "properties": {
+        "admin_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 管理员ID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 授课表主键"
+        },
+        "teacher_id": {
+          "type": "string",
+          "description": " 教师工号"
+        },
+        "course_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 课程ID"
+        }
+      },
+      "title": "UpdateTeachingReq",
+      "required": [
+        "admin_id",
+        "id",
+        "teacher_id",
+        "course_id"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

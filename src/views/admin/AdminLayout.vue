@@ -1,0 +1,226 @@
+<template>
+  <el-container class="admin-layout">
+    <el-aside width="250px" class="sidebar">
+      <div class="logo">
+        <h2>学生管理系统</h2>
+        <p>管理员端</p>
+      </div>
+      
+      <el-menu
+        :default-active="$route.path"
+        class="sidebar-menu"
+        router
+        background-color="#304156"
+        text-color="#bfcbd9"
+        active-text-color="#409EFF"
+      >
+        <el-menu-item index="/admin/dashboard">
+          <el-icon><DataBoard /></el-icon>
+          <span>仪表盘</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/students">
+          <el-icon><User /></el-icon>
+          <span>学生管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/teachers">
+          <el-icon><Avatar /></el-icon>
+          <span>教师管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/classes">
+          <el-icon><School /></el-icon>
+          <span>班级管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/courses">
+          <el-icon><Reading /></el-icon>
+          <span>课程管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/departments">
+          <el-icon><OfficeBuilding /></el-icon>
+          <span>部门管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/teachings">
+          <el-icon><Calendar /></el-icon>
+          <span>授课管理</span>
+        </el-menu-item>
+        
+        <el-menu-item index="/admin/statistics">
+          <el-icon><TrendCharts /></el-icon>
+          <span>统计分析</span>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+    
+    <el-container>
+      <el-header class="header">
+        <div class="header-left">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ getCurrentPageTitle() }}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+        
+        <div class="header-right">
+          <el-dropdown @command="handleCommand">
+            <span class="user-info">
+              <el-avatar :size="32" :src="userAvatar">
+                {{ authStore.user?.name?.charAt(0) }}
+              </el-avatar>
+              <span class="username">{{ authStore.user?.name }}</span>
+              <el-icon><ArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </el-header>
+      
+      <el-main class="main-content">
+        <router-view />
+      </el-main>
+    </el-container>
+  </el-container>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessageBox } from 'element-plus'
+import {
+  DataBoard,
+  User,
+  Avatar,
+  School,
+  Reading,
+  OfficeBuilding,
+  Calendar,
+  TrendCharts,
+  ArrowDown
+} from '@element-plus/icons-vue'
+import { useAuthStore } from '../../stores/auth'
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+const userAvatar = computed(() => {
+  // 这里可以设置用户头像，暂时使用默认头像
+  return ''
+})
+
+const getCurrentPageTitle = () => {
+  const routeMap: Record<string, string> = {
+    '/admin/dashboard': '仪表盘',
+    '/admin/students': '学生管理',
+    '/admin/teachers': '教师管理',
+    '/admin/classes': '班级管理',
+    '/admin/courses': '课程管理',
+    '/admin/departments': '部门管理',
+    '/admin/teachings': '授课管理',
+    '/admin/statistics': '统计分析'
+  }
+  return routeMap[route.path] || '首页'
+}
+
+const handleCommand = async (command: string) => {
+  if (command === 'logout') {
+    try {
+      await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      authStore.logout()
+      router.push('/login')
+    } catch {
+      // 用户取消
+    }
+  } else if (command === 'profile') {
+    // 跳转到个人信息页面
+    console.log('个人信息')
+  }
+}
+</script>
+
+<style scoped>
+.admin-layout {
+  height: 100vh;
+}
+
+.sidebar {
+  background-color: #304156;
+  color: white;
+}
+
+.logo {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #435266;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #fff;
+}
+
+.logo p {
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  color: #bfcbd9;
+}
+
+.sidebar-menu {
+  border: none;
+}
+
+.header {
+  background-color: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.user-info:hover {
+  background-color: #f5f5f5;
+}
+
+.username {
+  margin: 0 8px;
+  color: #333;
+}
+
+.main-content {
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+</style> 
