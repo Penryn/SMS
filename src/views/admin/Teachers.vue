@@ -4,7 +4,7 @@
       <template #header>
         <div class="page-header">
           <span>教师管理</span>
-          <el-button type="primary" @click="showAddDialog = true">
+          <el-button type="primary" @click="resetForm(); showAddDialog = true">
             <el-icon><Plus /></el-icon>
             添加教师
           </el-button>
@@ -173,6 +173,24 @@ const handleEdit = (row: Teacher) => {
   isEdit.value = true
   Object.assign(form, row)
   showAddDialog.value = true
+}
+
+const resetForm = () => {
+  if (formRef.value) {
+    formRef.value.resetFields(); // 先重置校验和表单
+  }
+  isEdit.value = false;
+  Object.assign(form, {
+    id: 0,
+    teacher_id: '',
+    name: '',
+    gender: '',
+    age: 30,
+    title: '',
+    phone: '',
+    is_admin: false,
+    password: ''
+  });
 }
 
 const handleDelete = async (row: Teacher) => {
