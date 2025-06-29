@@ -47,9 +47,7 @@
         <div class="header-right">
           <el-dropdown @command="handleCommand">
             <span class="user-info">
-              <el-avatar :size="32" :src="userAvatar">
-                {{ authStore.user?.name?.charAt(0) }}
-              </el-avatar>
+              <el-icon class="user-avatar"><User /></el-icon>
               <span class="username">{{ username }}</span>
               <el-icon><ArrowDown /></el-icon>
             </span>
@@ -86,10 +84,6 @@ import { useAuthStore } from '../../stores/auth'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-
-const userAvatar = computed(() => {
-  return ''
-})
 
 const username = computed(() => authStore.user?.username || '')
 
@@ -229,5 +223,17 @@ watch(
 .username {
   margin: 0 8px;
   color: #333;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background: #409EFF;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
 }
 </style> 

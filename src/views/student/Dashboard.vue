@@ -50,7 +50,12 @@
           </template>
           <el-table :data="myCourses" style="width: 100%" v-loading="loading" class="styled-table">
             <el-table-column prop="course_name" label="课程名称" header-align="center" align="center" />
-            <el-table-column prop="credits" label="学分" header-align="center" align="center" />
+            <el-table-column prop="exam_type" label="考试类型" header-align="center" align="center" />
+            <el-table-column label="授课教师" header-align="center" align="center">
+              <template #default="{ row }">
+                <span>{{ row.teachers && row.teachers.length ? row.teachers.map((t: any) => t.teacher_name).join('，') : '-' }}</span>
+              </template>
+            </el-table-column>
             <template #empty>
               <div style="text-align:center;color:#999;">暂无在学课程</div>
             </template>
@@ -118,6 +123,8 @@ const courseDetail = ref<any>(null)
 const scoreDetailVisible = ref(false)
 const scoreDetail = ref<any>(null)
 
+const currentYear = new Date().getFullYear()
+
 const loadDashboardData = async () => {
   loading.value = true
   try {
@@ -131,11 +138,10 @@ const loadDashboardData = async () => {
       stats.value.gpa = studentData.gpa || 0
     }
     // 获取成绩
-    const scoresResp = await studentApi.getScore(studentId)
-    if (scoresResp.code === 200 && Array.isArray(scoresResp.data.scores)) {
-      // 新结构：每个score对象包含course_id, course_name, school_year, semester, hours, exam_type, teachers, score, credits, retake_required
+    const scoresResp = await studentApi.getScore(studentId, currentYear)
+    if (scoresResp.code === 0 && Array.isArray(scoresResp.data.scores)) {
       const allScores = scoresResp.data.scores
-      myCourses.value = allScores.filter(s => s.score === null || s.score === undefined)
+      myCourses.value = allScores
       recentScores.value = allScores.filter(s => typeof s.score === 'number')
     } else {
       myCourses.value = []

@@ -45,13 +45,18 @@ export interface Teacher {
 export interface Score {
   course_id: number // 课程ID
   course_name: string // 课程名称
+  school_year: number // 学年
+  semester: string // 学期
+  hours: number // 课时
+  exam_type: string // 考试类型
+  teachers: Teacher[] // 教师列表
   score: number // 成绩
   credits: number // 学分
   retake_required: boolean // 是否需要重修
 }
 
 export interface SelectCourseReq {
-  student_id: string // 学生ID
+  student_id: number // 学生ID
   course_id: number // 课程ID
 }
 
@@ -63,7 +68,17 @@ export interface ApiResponse<T = any> {
 }
 
 export interface StudentResponse {
-  student: Student
+  id: number
+  student_id: string
+  name: string
+  gender: string
+  age: number
+  city_id: number
+  city_name: string
+  class_id: number
+  class_name: string
+  gpa: number
+  total_credits: number
 }
 
 export interface CourseResponse {
@@ -111,15 +126,14 @@ export const studentApi = {
   /**
    * 获取班级课程列表
    * @param class_id 班级ID
+   * @param year 学年
+   * @param semester 学期
    * @param student_id 学生ID 如果传了代表查询该学生的可选课程
-   * @param year 学年，可选
-   * @param semester 学期，可选
    * @returns 课程列表
    */
-  getClassCourse(class_id: number, student_id: string, year?: number, semester?: number): Promise<ApiResponse<CourseResponse>> {
-    const params: any = { class_id, student_id }
-    if (year) params.year = year
-    if (semester) params.semester = semester
+  getClassCourse(class_id: number, year: number, semester: number, student_id?: number): Promise<ApiResponse<CourseResponse>> {
+    const params: any = { class_id, year, semester }
+    if (student_id) params.student_id = student_id
     return api.get('/api/student/class/course', { params })
   },
 
