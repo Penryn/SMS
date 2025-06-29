@@ -122,39 +122,48 @@ const handleCommand = async (command: string) => {
 
 <style scoped>
 .layout-root {
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
   display: flex;
   overflow: hidden;
   background: #f5f6fa;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 .sidebar {
   width: 220px;
   height: 100vh;
-  min-height: 100vh;
   background: #253858;
   color: #fff;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 .main-area {
   flex: 1;
   height: 100vh;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 .header {
   height: 64px;
-  min-height: 64px;
   background: #fff;
   border-bottom: 1px solid #e6e6e6;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  box-sizing: border-box;
+  margin: 0;
 }
 .main-content {
   flex: 1;
@@ -162,6 +171,9 @@ const handleCommand = async (command: string) => {
   background: transparent;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 .logo {
   padding: 20px;
