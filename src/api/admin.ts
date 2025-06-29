@@ -321,7 +321,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteStudent(data: DeleteStudentReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/student', { data })
+    return api.delete('/api/admin/student', { params: data })
   },
 
   /**
@@ -367,7 +367,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteTeacher(data: DeleteTeacherReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/teacher', { data })
+    return api.delete('/api/admin/teacher', { params: data })
   },
 
   /**
@@ -416,7 +416,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteCourse(data: DeleteCourseReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/course', { data })
+    return api.delete('/api/admin/course', { params: data })
   },
 
   /**
@@ -465,7 +465,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteClass(data: DeleteClassReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/class', { data })
+    return api.delete('/api/admin/class', { params: data })
   },
 
   /**
@@ -511,7 +511,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteDepartment(data: DeleteDepartmentReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/department', { data })
+    return api.delete('/api/admin/department', { params: data })
   },
 
   /**
@@ -557,7 +557,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteTeaching(data: DeleteTeachingReq): Promise<ApiResponse> {
-    return api.delete('/api/admin/teaching', { data })
+    return api.delete('/api/admin/teaching', { params: data })
   },
 
   /**
