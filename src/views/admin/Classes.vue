@@ -4,7 +4,7 @@
       <template #header>
         <div class="page-header">
           <span>班级管理</span>
-          <el-button type="primary" @click="showAddDialog = true">
+          <el-button type="primary" @click="resetForm(); showAddDialog = true">
             <el-icon><Plus /></el-icon>
             添加班级
           </el-button>
@@ -13,17 +13,15 @@
       
       <el-table
         v-loading="loading"
-        :data="classes"
+        :data="paginatedClasses"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="班级名称" />
-        <el-table-column prop="class_id" label="班级编号" />
-        <el-table-column prop="grade" label="年级" />
-        <el-table-column prop="major" label="专业" />
-        <el-table-column prop="student_count" label="学生人数" />
-        <el-table-column prop="advisor_name" label="班主任" />
+        <el-table-column prop="department_id" label="所属部门">
+          <template #default="{ row }">
+            {{ getDepartmentName(row.department_id) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button size="small" @click="handleEdit(row)">编辑</el-button>
@@ -31,6 +29,19 @@
           </template>
         </el-table-column>
       </el-table>
+      
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+          v-model:current-page="pagination.currentPage"
+          v-model:page-size="pagination.pageSize"
+          :page-sizes="[15, 20, 50, 100]"
+          :total="pagination.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-card>
 
     <!-- 添加/编辑班级对话框 -->
@@ -48,37 +59,15 @@
         <el-form-item label="班级名称" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="班级编号" prop="class_id">
-          <el-input v-model="form.class_id" :disabled="isEdit" />
-        </el-form-item>
-        <el-form-item label="年级" prop="grade">
-          <el-select v-model="form.grade" placeholder="请选择年级">
-            <el-option label="2021级" value="2021" />
-            <el-option label="2022级" value="2022" />
-            <el-option label="2023级" value="2023" />
-            <el-option label="2024级" value="2024" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="专业" prop="major">
-          <el-input v-model="form.major" />
-        </el-form-item>
-        <el-form-item label="班主任" prop="advisor_id">
-          <el-select v-model="form.advisor_id" placeholder="请选择班主任">
+        <el-form-item label="所属部门" prop="department_id">
+          <el-select v-model="form.department_id" placeholder="请选择部门">
             <el-option
-              v-for="teacher in teachers"
-              :key="teacher.id"
-              :label="teacher.name"
-              :value="teacher.id"
+              v-for="department in departments"
+              :key="department.id"
+              :label="department.name"
+              :value="department.id"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item label="班级描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入班级描述"
-          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -92,38 +81,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
-import type { Class, Teacher } from '../../types'
+import type { ClassInfo, Teacher, Department } from '../../types'
 import { useAuthStore } from '../../stores/auth'
 
 const authStore = useAuthStore()
 
 const loading = ref(false)
-const classes = ref<Class[]>([])
+const classes = ref<ClassInfo[]>([])
 const teachers = ref<Teacher[]>([])
+const departments = ref<Department[]>([])
 const showAddDialog = ref(false)
 const isEdit = ref(false)
 const formRef = ref()
 
+// 分页相关
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 15,
+  total: 0
+})
+
+// 计算当前页显示的班级数据
+const paginatedClasses = computed(() => {
+  const start = (pagination.currentPage - 1) * pagination.pageSize
+  const end = start + pagination.pageSize
+  return classes.value.slice(start, end)
+})
+
 const form = reactive({
   id: 0,
-  class_id: '',
   name: '',
-  grade: '',
-  major: '',
-  advisor_id: 0,
-  description: ''
+  department_id: ''
 })
 
 const rules = {
   name: [{ required: true, message: '请输入班级名称', trigger: 'blur' }],
-  class_id: [{ required: true, message: '请输入班级编号', trigger: 'blur' }],
-  grade: [{ required: true, message: '请选择年级', trigger: 'change' }],
-  major: [{ required: true, message: '请输入专业', trigger: 'blur' }],
-  advisor_id: [{ required: true, message: '请选择班主任', trigger: 'change' }]
+  department_id: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 }
 
 const loadClasses = async () => {
@@ -133,6 +130,7 @@ const loadClasses = async () => {
     const response = await adminApi.getClasses(adminId)
     if (response.code === 0) {
       classes.value = response.data.list || []
+      pagination.total = response.data.total || classes.value.length
     }
   } catch (error) {
     ElMessage.error('加载班级列表失败')
@@ -153,13 +151,25 @@ const loadTeachers = async () => {
   }
 }
 
-const handleEdit = (row: Class) => {
+const loadDepartments = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getDepartments(adminId)
+    if (response.code === 0) {
+      departments.value = response.data.list || []
+    }
+  } catch (error) {
+    console.error('加载部门列表失败:', error)
+  }
+}
+
+const handleEdit = (row: ClassInfo) => {
   isEdit.value = true
   Object.assign(form, row)
   showAddDialog.value = true
 }
 
-const handleDelete = async (row: Class) => {
+const handleDelete = async (row: ClassInfo) => {
   try {
     await ElMessageBox.confirm('确定要删除这个班级吗？', '提示', {
       confirmButtonText: '确定',
@@ -168,7 +178,7 @@ const handleDelete = async (row: Class) => {
     })
     
     const adminId = authStore.user?.id || 1
-    await adminApi.deleteClass({ admin_id: adminId, id: row.id })
+    await adminApi.deleteClass({ admin_id: adminId, class_id: row.id })
     ElMessage.success('删除成功')
     loadClasses()
   } catch (error) {
@@ -179,37 +189,73 @@ const handleDelete = async (row: Class) => {
 }
 
 const handleSubmit = async () => {
-  if (!formRef.value) return
-  
+  if (!formRef.value) return;
+
   try {
-    await formRef.value.validate()
-    
-    const adminId = authStore.user?.id || 1
-    
+    await formRef.value.validate();
+
+    const adminId = authStore.user?.id || 1;
+
     if (isEdit.value) {
       // 编辑班级
-      await adminApi.updateClass({ ...form, admin_id: adminId })
-      ElMessage.success('更新成功')
+      const updateData = {
+        admin_id: adminId,
+        class_id: form.id,
+        name: form.name,
+        department_id: Number(form.department_id)
+      };
+      await adminApi.updateClass(updateData);
+      ElMessage.success('更新成功');
     } else {
       // 添加班级
-      await adminApi.createClass({ ...form, admin_id: adminId })
-      ElMessage.success('添加成功')
+      const submitData = {
+        ...form,
+        admin_id: adminId,
+        department_id: Number(form.department_id)
+      };
+      await adminApi.createClass(submitData);
+      ElMessage.success('添加成功');
     }
-    
-    showAddDialog.value = false
-    loadClasses()
+
+    showAddDialog.value = false;
+    loadClasses();
   } catch (error) {
-    ElMessage.error('操作失败')
+    ElMessage.error('操作失败');
   }
+};
+
+// 分页处理函数
+const handleSizeChange = (val: number) => {
+  pagination.pageSize = val
+  pagination.currentPage = 1
 }
 
-const handleSelectionChange = (selection: Class[]) => {
-  console.log('选中的班级:', selection)
+const handleCurrentChange = (val: number) => {
+  pagination.currentPage = val
+}
+
+// 获取部门名称
+const getDepartmentName = (departmentId: number) => {
+  const department = departments.value.find(d => d.id === departmentId)
+  return department ? department.name : `部门${departmentId}`
+}
+
+const resetForm = () => {
+  if (formRef.value) {
+    formRef.value.resetFields();
+  }
+  isEdit.value = false;
+  Object.assign(form, {
+    id: 0,
+    name: '',
+    department_id: ''
+  });
 }
 
 onMounted(() => {
   loadClasses()
   loadTeachers()
+  loadDepartments()
 })
 </script>
 
@@ -228,5 +274,11 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style> 
