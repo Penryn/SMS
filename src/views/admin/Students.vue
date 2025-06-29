@@ -91,6 +91,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
 import type { Student } from '../../types'
+import { useAuthStore } from '../../stores/auth'
+
+const authStore = useAuthStore()
 
 const loading = ref(false)
 const students = ref<Student[]>([])
@@ -127,10 +130,10 @@ const rules = {
 const loadStudents = async () => {
   loading.value = true
   try {
-    // 这里需要传入admin_id，暂时使用1
-    const response = await adminApi.getStudents(1)
-    if (response.code === 200) {
-      students.value = response.data.students
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getStudents(adminId)
+    if (response.code === 0) {
+      students.value = response.data.list || []
     }
   } catch (error) {
     ElMessage.error('加载学生列表失败')
@@ -153,8 +156,8 @@ const handleDelete = async (row: Student) => {
       type: 'warning'
     })
     
-    // 这里需要传入admin_id，暂时使用1
-    await adminApi.deleteStudent({ admin_id: 1, student_id: row.id })
+    const adminId = authStore.user?.id || 1
+    await adminApi.deleteStudent({ admin_id: adminId, id: row.id })
     ElMessage.success('删除成功')
     loadStudents()
   } catch (error) {
@@ -170,13 +173,15 @@ const handleSubmit = async () => {
   try {
     await formRef.value.validate()
     
+    const adminId = authStore.user?.id || 1
+    
     if (isEdit.value) {
       // 编辑学生
-      await adminApi.updateStudent({ ...form, admin_id: 1 })
+      await adminApi.updateStudent({ ...form, admin_id: adminId })
       ElMessage.success('更新成功')
     } else {
       // 添加学生
-      await adminApi.createStudent({ ...form, admin_id: 1 })
+      await adminApi.createStudent({ ...form, admin_id: adminId })
       ElMessage.success('添加成功')
     }
     

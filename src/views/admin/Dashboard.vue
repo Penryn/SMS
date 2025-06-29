@@ -99,6 +99,9 @@
 import { ref, onMounted } from 'vue'
 import { User, Avatar, Reading, School } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
+import { useAuthStore } from '../../stores/auth'
+
+const authStore = useAuthStore()
 
 const stats = ref({
   studentCount: 0,
@@ -128,8 +131,52 @@ const notices = ref([
 
 const loadDashboardData = async () => {
   try {
-    // 这里应该调用实际的API来获取统计数据
-    // 暂时使用模拟数据
+    const adminId = authStore.user?.id || 1
+
+    // 获取统计数据
+    const [studentsRes, teachersRes, coursesRes, classesRes, avgScoresRes] = await Promise.all([
+      adminApi.getStudents(adminId),
+      adminApi.getTeachers(adminId),
+      adminApi.getCourses(adminId),
+      adminApi.getClasses(adminId),
+      adminApi.getAvgScore(adminId)
+    ])
+
+    // 更新统计数据
+    if (studentsRes.code === 0) {
+      stats.value.studentCount = studentsRes.data.list?.length || 0
+    }
+    if (teachersRes.code === 0) {
+      stats.value.teacherCount = teachersRes.data.list?.length || 0
+    }
+    if (coursesRes.code === 0) {
+      stats.value.courseCount = coursesRes.data.list?.length || 0
+    }
+    if (classesRes.code === 0) {
+      stats.value.classCount = classesRes.data.list?.length || 0
+    }
+
+    // 获取最近添加的学生（取前5个）
+    if (studentsRes.code === 0 && studentsRes.data.list) {
+      recentStudents.value = studentsRes.data.list.slice(0, 5).map(student => ({
+        name: student.name,
+        student_id: student.student_id,
+        class_name: `班级${student.class_id}` // 这里可以根据class_id获取真实班级名称
+      }))
+    }
+
+    // 获取课程平均成绩统计
+    if (avgScoresRes.code === 0 && avgScoresRes.data.avg_scores) {
+      const avgScores = avgScoresRes.data.avg_scores
+      if (avgScores.length > 0) {
+        const totalAvg = avgScores.reduce((sum: number, item: any) => sum + item.avg_score, 0)
+        stats.value.avgScore = (totalAvg / avgScores.length).toFixed(1)
+      }
+    }
+
+  } catch (error) {
+    console.error('加载仪表盘数据失败:', error)
+    // 如果API调用失败，使用默认数据
     stats.value = {
       studentCount: 1250,
       teacherCount: 89,
@@ -142,8 +189,6 @@ const loadDashboardData = async () => {
       { name: '李四', student_id: '2024002', class_name: '软件工程1班' },
       { name: '王五', student_id: '2024003', class_name: '数据科学1班' }
     ]
-  } catch (error) {
-    console.error('加载仪表盘数据失败:', error)
   }
 }
 
@@ -154,11 +199,8 @@ onMounted(() => {
 
 <style scoped>
 .page-root {
-  width: 100vw;
-  height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -166,6 +208,8 @@ onMounted(() => {
 
 .dashboard {
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .stat-card {
