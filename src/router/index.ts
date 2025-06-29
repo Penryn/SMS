@@ -56,11 +56,6 @@ const routes = [
         path: 'teachings',
         name: 'AdminTeachings',
         component: () => import('../views/admin/Teachings.vue')
-      },
-      {
-        path: 'statistics',
-        name: 'AdminStatistics',
-        component: () => import('../views/admin/Statistics.vue')
       }
     ]
   },
@@ -120,11 +115,6 @@ const routes = [
         path: 'students',
         name: 'TeacherStudents',
         component: () => import('../views/teacher/Students.vue')
-      },
-      {
-        path: 'scores',
-        name: 'TeacherScores',
-        component: () => import('../views/teacher/Scores.vue')
       },
       {
         path: 'profile',

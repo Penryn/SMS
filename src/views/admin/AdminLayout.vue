@@ -48,11 +48,6 @@
           <el-icon><Calendar /></el-icon>
           <span>授课管理</span>
         </el-menu-item>
-        
-        <el-menu-item index="/admin/statistics">
-          <el-icon><TrendCharts /></el-icon>
-          <span>统计分析</span>
-        </el-menu-item>
       </el-menu>
     </aside>
     
@@ -97,7 +92,6 @@ import {
   Reading,
   OfficeBuilding,
   Calendar,
-  TrendCharts,
   ArrowDown
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '../../stores/auth'
@@ -121,8 +115,7 @@ const getCurrentPageTitle = () => {
     '/admin/classes': '班级管理',
     '/admin/courses': '课程管理',
     '/admin/departments': '部门管理',
-    '/admin/teachings': '授课管理',
-    '/admin/statistics': '统计分析'
+    '/admin/teachings': '授课管理'
   }
   return routeMap[route.path] || '首页'
 }
