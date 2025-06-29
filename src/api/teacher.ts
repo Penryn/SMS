@@ -3,7 +3,7 @@
  * Base URL: http://121.43.236.83:8888
  */
 
-import request from '../utils/request'
+import api from './config'
 
 // 类型定义
 export interface Teacher {
@@ -75,7 +75,7 @@ export interface SetStudentScoreReq {
 // API响应类型
 export interface ApiResponse<T = any> {
   code: number
-  message: string
+  msg: string // 更新为后端实际返回的字段
   data: T
 }
 
@@ -113,7 +113,7 @@ export const teacherApi = {
    * @returns 教师信息
    */
   getTeacher(id: number): Promise<ApiResponse<TeacherResponse>> {
-    return request.get('/api/teacher', { params: { id } })
+    return api.get('/api/teacher', { params: { id } })
   },
 
   /**
@@ -127,7 +127,7 @@ export const teacherApi = {
     const params: any = { teacher_id }
     if (year) params.year = year
     if (semester) params.semester = semester
-    return request.get('/api/teacher/course', { params })
+    return api.get('/api/teacher/course', { params })
   },
 
   /**
@@ -136,7 +136,7 @@ export const teacherApi = {
    * @returns 课程平均成绩
    */
   getCourseAvgScore(teacher_id: number): Promise<ApiResponse<CourseAvgScoreResponse>> {
-    return request.get('/api/teacher/course/avgscore', { params: { teacher_id } })
+    return api.get('/api/teacher/course/avgscore', { params: { teacher_id } })
   },
 
   /**
@@ -148,7 +148,7 @@ export const teacherApi = {
    * @returns 课程成绩排名
    */
   getCourseRank(teacher_id: number, course_id: number, year: number, semester: number): Promise<ApiResponse<CourseRankResponse>> {
-    return request.get('/api/teacher/course/rank', { params: { teacher_id, course_id, year, semester } })
+    return api.get('/api/teacher/course/rank', { params: { teacher_id, course_id, year, semester } })
   },
 
   /**
@@ -163,7 +163,7 @@ export const teacherApi = {
     const params: any = { teacher_id, course_id }
     if (year) params.year = year
     if (semester) params.semester = semester
-    return request.get('/api/teacher/course/student', { params })
+    return api.get('/api/teacher/course/student', { params })
   },
 
   /**
@@ -173,7 +173,7 @@ export const teacherApi = {
    * @returns 学生信息
    */
   getStudent(teacher_id: number, student_id: string): Promise<ApiResponse<StudentResponse>> {
-    return request.get('/api/teacher/student', { params: { teacher_id, student_id } })
+    return api.get('/api/teacher/student', { params: { teacher_id, student_id } })
   },
 
   /**
@@ -182,6 +182,6 @@ export const teacherApi = {
    * @returns 设置结果
    */
   setStudentScore(data: SetStudentScoreReq): Promise<ApiResponse> {
-    return request.post('/api/teacher/course/student/score', data)
+    return api.post('/api/teacher/course/student/score', data)
   }
 } 

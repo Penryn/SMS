@@ -1,95 +1,97 @@
 <template>
-  <div class="dashboard">
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon student-icon">
-              <el-icon><User /></el-icon>
+  <div class="page-root">
+    <div class="dashboard">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon student-icon">
+                <el-icon><User /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.studentCount }}</div>
+                <div class="stat-label">学生总数</div>
+              </div>
             </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.studentCount }}</div>
-              <div class="stat-label">学生总数</div>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon teacher-icon">
+                <el-icon><Avatar /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.teacherCount }}</div>
+                <div class="stat-label">教师总数</div>
+              </div>
             </div>
-          </div>
-        </el-card>
-      </el-col>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon course-icon">
+                <el-icon><Reading /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.courseCount }}</div>
+                <div class="stat-label">课程总数</div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon class-icon">
+                <el-icon><School /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.classCount }}</div>
+                <div class="stat-label">班级总数</div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
       
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon teacher-icon">
-              <el-icon><Avatar /></el-icon>
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>最近添加的学生</span>
+              </div>
+            </template>
+            <el-table :data="recentStudents" style="width: 100%">
+              <el-table-column prop="name" label="姓名" />
+              <el-table-column prop="student_id" label="学号" />
+              <el-table-column prop="class_name" label="班级" />
+            </el-table>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>系统公告</span>
+              </div>
+            </template>
+            <div class="notice-list">
+              <div v-for="notice in notices" :key="notice.id" class="notice-item">
+                <div class="notice-title">{{ notice.title }}</div>
+                <div class="notice-time">{{ notice.time }}</div>
+              </div>
             </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.teacherCount }}</div>
-              <div class="stat-label">教师总数</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon course-icon">
-              <el-icon><Reading /></el-icon>
-            </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.courseCount }}</div>
-              <div class="stat-label">课程总数</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon class-icon">
-              <el-icon><School /></el-icon>
-            </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.classCount }}</div>
-              <div class="stat-label">班级总数</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="12">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>最近添加的学生</span>
-            </div>
-          </template>
-          <el-table :data="recentStudents" style="width: 100%">
-            <el-table-column prop="name" label="姓名" />
-            <el-table-column prop="student_id" label="学号" />
-            <el-table-column prop="class_name" label="班级" />
-          </el-table>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="12">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>系统公告</span>
-            </div>
-          </template>
-          <div class="notice-list">
-            <div v-for="notice in notices" :key="notice.id" class="notice-item">
-              <div class="notice-title">{{ notice.title }}</div>
-              <div class="notice-time">{{ notice.time }}</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -151,6 +153,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.page-root {
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
 .dashboard {
   padding: 20px;
 }

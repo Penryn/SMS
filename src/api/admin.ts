@@ -3,7 +3,7 @@
  * Base URL: http://121.43.236.83:8888
  */
 
-import request from '../utils/request'
+import api from './config'
 import type {
   ApiResponse,
   Student,
@@ -293,7 +293,7 @@ export interface AvgScore {
 // API响应类型
 export interface ApiResponse<T = any> {
   code: number
-  message: string
+  msg: string // 更新为后端实际返回的字段
   data: T
 }
 
@@ -371,7 +371,7 @@ export const adminApi = {
    * @returns 登录响应
    */
   login(data: LoginReq): Promise<ApiResponse<LoginResp>> {
-    return request.post('/api/login', data)
+    return api.post('/api/login', data)
   },
 
   /**
@@ -383,7 +383,7 @@ export const adminApi = {
   getStudents(admin_id: number, class_id?: number): Promise<ApiResponse<StudentListResponse>> {
     const params: any = { admin_id }
     if (class_id) params.class_id = class_id
-    return request.get('/api/admin/students', { params })
+    return api.get('/api/admin/students', { params })
   },
 
   /**
@@ -393,7 +393,7 @@ export const adminApi = {
    * @returns 学生信息
    */
   getStudent(admin_id: number, id: number): Promise<ApiResponse<Student>> {
-    return request.get('/api/admin/student', { params: { admin_id, id } })
+    return api.get('/api/admin/student', { params: { admin_id, id } })
   },
 
   /**
@@ -402,7 +402,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createStudent(data: CreateStudentReq): Promise<ApiResponse> {
-    return request.post('/api/admin/student', data)
+    return api.post('/api/admin/student', data)
   },
 
   /**
@@ -411,7 +411,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateStudent(data: UpdateStudentReq): Promise<ApiResponse> {
-    return request.put('/api/admin/student', data)
+    return api.put('/api/admin/student', data)
   },
 
   /**
@@ -420,7 +420,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteStudent(data: DeleteStudentReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/student', { data })
+    return api.delete('/api/admin/student', { data })
   },
 
   /**
@@ -429,7 +429,7 @@ export const adminApi = {
    * @returns 教师列表
    */
   getTeachers(admin_id: number): Promise<ApiResponse<TeacherListResponse>> {
-    return request.get('/api/admin/teachers', { params: { admin_id } })
+    return api.get('/api/admin/teachers', { params: { admin_id } })
   },
 
   /**
@@ -439,7 +439,7 @@ export const adminApi = {
    * @returns 教师信息
    */
   getTeacher(admin_id: number, id: number): Promise<ApiResponse<Teacher>> {
-    return request.get('/api/admin/teacher', { params: { admin_id, id } })
+    return api.get('/api/admin/teacher', { params: { admin_id, id } })
   },
 
   /**
@@ -448,7 +448,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createTeacher(data: CreateTeacherReq): Promise<ApiResponse> {
-    return request.post('/api/admin/teacher', data)
+    return api.post('/api/admin/teacher', data)
   },
 
   /**
@@ -457,7 +457,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateTeacher(data: UpdateTeacherReq): Promise<ApiResponse> {
-    return request.put('/api/admin/teacher', data)
+    return api.put('/api/admin/teacher', data)
   },
 
   /**
@@ -466,7 +466,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteTeacher(data: DeleteTeacherReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/teacher', { data })
+    return api.delete('/api/admin/teacher', { data })
   },
 
   /**
@@ -478,7 +478,7 @@ export const adminApi = {
   getCourses(admin_id: number, class_id?: number): Promise<ApiResponse<CourseListResponse>> {
     const params: any = { admin_id }
     if (class_id) params.class_id = class_id
-    return request.get('/api/admin/courses', { params })
+    return api.get('/api/admin/courses', { params })
   },
 
   /**
@@ -488,7 +488,7 @@ export const adminApi = {
    * @returns 课程信息
    */
   getCourse(admin_id: number, id: number): Promise<ApiResponse<Course>> {
-    return request.get('/api/admin/course', { params: { admin_id, id } })
+    return api.get('/api/admin/course', { params: { admin_id, id } })
   },
 
   /**
@@ -497,7 +497,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createCourse(data: CreateCourseReq): Promise<ApiResponse> {
-    return request.post('/api/admin/course', data)
+    return api.post('/api/admin/course', data)
   },
 
   /**
@@ -506,7 +506,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateCourse(data: UpdateCourseReq): Promise<ApiResponse> {
-    return request.put('/api/admin/course', data)
+    return api.put('/api/admin/course', data)
   },
 
   /**
@@ -515,7 +515,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteCourse(data: DeleteCourseReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/course', { data })
+    return api.delete('/api/admin/course', { data })
   },
 
   /**
@@ -527,7 +527,7 @@ export const adminApi = {
   getClasses(admin_id: number, department_id?: number): Promise<ApiResponse<ClassListResponse>> {
     const params: any = { admin_id }
     if (department_id) params.department_id = department_id
-    return request.get('/api/admin/classes', { params })
+    return api.get('/api/admin/classes', { params })
   },
 
   /**
@@ -537,7 +537,7 @@ export const adminApi = {
    * @returns 班级信息
    */
   getClass(admin_id: number, class_id: number): Promise<ApiResponse<Class>> {
-    return request.get('/api/admin/class', { params: { admin_id, class_id } })
+    return api.get('/api/admin/class', { params: { admin_id, class_id } })
   },
 
   /**
@@ -546,7 +546,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createClass(data: CreateClassReq): Promise<ApiResponse> {
-    return request.post('/api/admin/class', data)
+    return api.post('/api/admin/class', data)
   },
 
   /**
@@ -555,7 +555,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateClass(data: UpdateClassReq): Promise<ApiResponse> {
-    return request.put('/api/admin/class', data)
+    return api.put('/api/admin/class', data)
   },
 
   /**
@@ -564,7 +564,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteClass(data: DeleteClassReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/class', { data })
+    return api.delete('/api/admin/class', { data })
   },
 
   /**
@@ -573,7 +573,7 @@ export const adminApi = {
    * @returns 部门列表
    */
   getDepartments(admin_id: number): Promise<ApiResponse<DepartmentListResponse>> {
-    return request.get('/api/admin/departments', { params: { admin_id } })
+    return api.get('/api/admin/departments', { params: { admin_id } })
   },
 
   /**
@@ -583,7 +583,7 @@ export const adminApi = {
    * @returns 部门信息
    */
   getDepartment(admin_id: number, department_id: number): Promise<ApiResponse<Department>> {
-    return request.get('/api/admin/department', { params: { admin_id, department_id } })
+    return api.get('/api/admin/department', { params: { admin_id, department_id } })
   },
 
   /**
@@ -592,7 +592,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createDepartment(data: CreateDepartmentReq): Promise<ApiResponse> {
-    return request.post('/api/admin/department', data)
+    return api.post('/api/admin/department', data)
   },
 
   /**
@@ -601,7 +601,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateDepartment(data: UpdateDepartmentReq): Promise<ApiResponse> {
-    return request.put('/api/admin/department', data)
+    return api.put('/api/admin/department', data)
   },
 
   /**
@@ -610,7 +610,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteDepartment(data: DeleteDepartmentReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/department', { data })
+    return api.delete('/api/admin/department', { data })
   },
 
   /**
@@ -624,7 +624,7 @@ export const adminApi = {
     const params: any = { admin_id }
     if (teacher_id) params.teacher_id = teacher_id
     if (course_id) params.course_id = course_id
-    return request.get('/api/admin/teachings', { params })
+    return api.get('/api/admin/teachings', { params })
   },
 
   /**
@@ -634,7 +634,7 @@ export const adminApi = {
    * @returns 授课信息
    */
   getTeaching(admin_id: number, id: number): Promise<ApiResponse<Teaching>> {
-    return request.get('/api/admin/teaching', { params: { admin_id, id } })
+    return api.get('/api/admin/teaching', { params: { admin_id, id } })
   },
 
   /**
@@ -643,7 +643,7 @@ export const adminApi = {
    * @returns 创建结果
    */
   createTeaching(data: CreateTeachingReq): Promise<ApiResponse> {
-    return request.post('/api/admin/teaching', data)
+    return api.post('/api/admin/teaching', data)
   },
 
   /**
@@ -652,7 +652,7 @@ export const adminApi = {
    * @returns 更新结果
    */
   updateTeaching(data: UpdateTeachingReq): Promise<ApiResponse> {
-    return request.put('/api/admin/teaching', data)
+    return api.put('/api/admin/teaching', data)
   },
 
   /**
@@ -661,7 +661,7 @@ export const adminApi = {
    * @returns 删除结果
    */
   deleteTeaching(data: DeleteTeachingReq): Promise<ApiResponse> {
-    return request.delete('/api/admin/teaching', { data })
+    return api.delete('/api/admin/teaching', { data })
   },
 
   /**
@@ -670,7 +670,7 @@ export const adminApi = {
    * @returns 省份列表
    */
   getProvinces(admin_id: number): Promise<ApiResponse<ProvinceListResponse>> {
-    return request.get('/api/admin/provinces', { params: { admin_id } })
+    return api.get('/api/admin/provinces', { params: { admin_id } })
   },
 
   /**
@@ -680,7 +680,7 @@ export const adminApi = {
    * @returns 城市列表
    */
   getCities(admin_id: number, province_id: number): Promise<ApiResponse<CityListResponse>> {
-    return request.get('/api/admin/cities', { params: { admin_id, province_id } })
+    return api.get('/api/admin/cities', { params: { admin_id, province_id } })
   },
 
   /**
@@ -691,7 +691,7 @@ export const adminApi = {
    * @returns 分数分布
    */
   getCourseScoreDistribution(admin_id: number, course_id: number, school_year: number): Promise<ApiResponse<ScoreDistributionResponse>> {
-    return request.get('/api/admin/course/score/distribution', { params: { admin_id, course_id, school_year } })
+    return api.get('/api/admin/course/score/distribution', { params: { admin_id, course_id, school_year } })
   },
 
   /**
@@ -702,7 +702,7 @@ export const adminApi = {
    * @returns 学生成绩列表
    */
   getCourseAllStudentScore(admin_id: number, course_name: string, school_year: number): Promise<ApiResponse<StudentScoreResponse>> {
-    return request.get('/api/admin/course/student/score', { params: { admin_id, course_name, school_year } })
+    return api.get('/api/admin/course/student/score', { params: { admin_id, course_name, school_year } })
   },
 
   /**
@@ -711,7 +711,7 @@ export const adminApi = {
    * @returns 教师统计信息
    */
   getTeacherStatistics(admin_id: number): Promise<ApiResponse<TeacherStatisticsResponse>> {
-    return request.get('/api/admin/teacher/statistics', { params: { admin_id } })
+    return api.get('/api/admin/teacher/statistics', { params: { admin_id } })
   },
 
   /**
@@ -722,7 +722,7 @@ export const adminApi = {
    * @returns GPA排名
    */
   getDepartmentGpaRank(admin_id: number, department_id: number, type: number): Promise<ApiResponse<GPARankResponse>> {
-    return request.get('/api/admin/department/gpa/rank', { params: { admin_id, department_id, type } })
+    return api.get('/api/admin/department/gpa/rank', { params: { admin_id, department_id, type } })
   },
 
   /**
@@ -731,7 +731,7 @@ export const adminApi = {
    * @returns 生源地绩点前十数量
    */
   getCityGpaTopTenCount(admin_id: number): Promise<ApiResponse<CityGpaTopTenCountResponse>> {
-    return request.get('/api/admin/city/gpa/top/ten/count', { params: { admin_id } })
+    return api.get('/api/admin/city/gpa/top/ten/count', { params: { admin_id } })
   },
 
   /**
@@ -740,7 +740,7 @@ export const adminApi = {
    * @returns 生源地学生数量
    */
   getCityStudentCount(admin_id: number): Promise<ApiResponse<CityStudentCountResponse>> {
-    return request.get('/api/admin/city/student/count', { params: { admin_id } })
+    return api.get('/api/admin/city/student/count', { params: { admin_id } })
   },
 
   /**
@@ -749,7 +749,7 @@ export const adminApi = {
    * @returns 课程平均成绩
    */
   getAvgScore(admin_id: number): Promise<ApiResponse<AvgScoreResponse>> {
-    return request.get('/api/admin/avg/score', { params: { admin_id } })
+    return api.get('/api/admin/avg/score', { params: { admin_id } })
   },
 
   /**
@@ -764,7 +764,7 @@ export const adminApi = {
     const params: any = { admin_id, class_id }
     if (school_year) params.school_year = school_year
     if (semester) params.semester = semester
-    return request.get('/api/admin/class/course', { params })
+    return api.get('/api/admin/class/course', { params })
   },
 
   /**
@@ -779,6 +779,6 @@ export const adminApi = {
     const params: any = { admin_id, teacher_id }
     if (school_year) params.school_year = school_year
     if (semester) params.semester = semester
-    return request.get('/api/admin/teacher/course', { params })
+    return api.get('/api/admin/teacher/course', { params })
   }
 } 

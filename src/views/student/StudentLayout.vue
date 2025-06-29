@@ -1,6 +1,6 @@
 <template>
-  <el-container class="student-layout">
-    <el-aside width="250px" class="sidebar">
+  <div class="layout-root">
+    <aside class="sidebar">
       <div class="logo">
         <h2>学生管理系统</h2>
         <p>学生端</p>
@@ -34,10 +34,9 @@
           <span>个人信息</span>
         </el-menu-item>
       </el-menu>
-    </el-aside>
-    
-    <el-container>
-      <el-header class="header">
+    </aside>
+    <div class="main-area">
+      <header class="header">
         <div class="header-left">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>首页</el-breadcrumb-item>
@@ -62,13 +61,13 @@
             </template>
           </el-dropdown>
         </div>
-      </el-header>
+      </header>
       
-      <el-main class="main-content">
+      <main class="main-content">
         <router-view />
-      </el-main>
-    </el-container>
-  </el-container>
+      </main>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -122,55 +121,73 @@ const handleCommand = async (command: string) => {
 </script>
 
 <style scoped>
-.student-layout {
+.layout-root {
+  width: 100vw;
   height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background: #f5f6fa;
 }
-
 .sidebar {
-  background-color: #304156;
-  color: white;
-}
-
-.logo {
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #435266;
-}
-
-.logo h2 {
-  margin: 0;
-  font-size: 18px;
+  width: 220px;
+  height: 100vh;
+  min-height: 100vh;
+  background: #253858;
   color: #fff;
+  display: flex;
+  flex-direction: column;
 }
-
-.logo p {
-  margin: 5px 0 0 0;
-  font-size: 12px;
-  color: #bfcbd9;
+.main-area {
+  flex: 1;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-
-.sidebar-menu {
-  border: none;
-}
-
 .header {
-  background-color: #fff;
+  height: 64px;
+  min-height: 64px;
+  background: #fff;
   border-bottom: 1px solid #e6e6e6;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
 }
-
+.main-content {
+  flex: 1;
+  overflow: auto;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #435266;
+}
+.logo h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #fff;
+}
+.logo p {
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  color: #bfcbd9;
+}
+.sidebar-menu {
+  border: none;
+}
 .header-left {
   flex: 1;
 }
-
 .header-right {
   display: flex;
   align-items: center;
 }
-
 .user-info {
   display: flex;
   align-items: center;
@@ -179,18 +196,11 @@ const handleCommand = async (command: string) => {
   border-radius: 4px;
   transition: background-color 0.3s;
 }
-
 .user-info:hover {
   background-color: #f5f5f5;
 }
-
 .username {
   margin: 0 8px;
   color: #333;
-}
-
-.main-content {
-  background-color: #f0f2f5;
-  padding: 20px;
 }
 </style> 

@@ -3,7 +3,7 @@
  * Base URL: http://121.43.236.83:8888
  */
 
-import request from '../utils/request'
+import api from './config'
 
 // 类型定义
 export interface Student {
@@ -58,7 +58,7 @@ export interface SelectCourseReq {
 // API响应类型
 export interface ApiResponse<T = any> {
   code: number
-  message: string
+  msg: string // 更新为后端实际返回的字段
   data: T
 }
 
@@ -84,7 +84,7 @@ export const studentApi = {
    * @returns 学生信息
    */
   getStudent(id: number): Promise<ApiResponse<StudentResponse>> {
-    return request.get('/api/student/info', { params: { id } })
+    return api.get('/api/student/info', { params: { id } })
   },
 
   /**
@@ -93,7 +93,7 @@ export const studentApi = {
    * @returns 更新结果
    */
   updateStudent(data: UpdateStudentReq): Promise<ApiResponse> {
-    return request.put('/api/student/info', data)
+    return api.put('/api/student/info', data)
   },
 
   /**
@@ -105,7 +105,7 @@ export const studentApi = {
   getScore(id: number, year?: number): Promise<ApiResponse<ScoreResponse>> {
     const params: any = { id }
     if (year) params.year = year
-    return request.get('/api/student/score', { params })
+    return api.get('/api/student/score', { params })
   },
 
   /**
@@ -120,7 +120,7 @@ export const studentApi = {
     const params: any = { class_id, student_id }
     if (year) params.year = year
     if (semester) params.semester = semester
-    return request.get('/api/student/class/course', { params })
+    return api.get('/api/student/class/course', { params })
   },
 
   /**
@@ -134,7 +134,7 @@ export const studentApi = {
     const params: any = { teacher_id }
     if (year) params.year = year
     if (semester) params.semester = semester
-    return request.get('/api/student/teacher/course', { params })
+    return api.get('/api/student/teacher/course', { params })
   },
 
   /**
@@ -143,6 +143,6 @@ export const studentApi = {
    * @returns 选课结果
    */
   selectCourse(data: SelectCourseReq): Promise<ApiResponse> {
-    return request.post('/api/student/course/select', data)
+    return api.post('/api/student/course/select', data)
   }
 } 

@@ -1,96 +1,98 @@
 <template>
-  <div class="teacher-dashboard">
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon course-icon">
-              <el-icon><Reading /></el-icon>
+  <div class="page-root">
+    <div class="teacher-dashboard">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon course-icon">
+                <el-icon><Reading /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.courseCount }}</div>
+                <div class="stat-label">授课课程</div>
+              </div>
             </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.courseCount }}</div>
-              <div class="stat-label">授课课程</div>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon student-icon">
+                <el-icon><User /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.studentCount }}</div>
+                <div class="stat-label">学生总数</div>
+              </div>
             </div>
-          </div>
-        </el-card>
-      </el-col>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon score-icon">
+                <el-icon><Document /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.avgScore }}</div>
+                <div class="stat-label">平均成绩</div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="6">
+          <el-card class="stat-card">
+            <div class="stat-content">
+              <div class="stat-icon class-icon">
+                <el-icon><School /></el-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.classCount }}</div>
+                <div class="stat-label">授课班级</div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
       
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon student-icon">
-              <el-icon><User /></el-icon>
-            </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.studentCount }}</div>
-              <div class="stat-label">学生总数</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon score-icon">
-              <el-icon><Document /></el-icon>
-            </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.avgScore }}</div>
-              <div class="stat-label">平均成绩</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="6">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon class-icon">
-              <el-icon><School /></el-icon>
-            </div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.classCount }}</div>
-              <div class="stat-label">授课班级</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="12">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>我的课程</span>
-            </div>
-          </template>
-          <el-table :data="myCourses" style="width: 100%">
-            <el-table-column prop="name" label="课程名称" />
-            <el-table-column prop="code" label="课程代码" />
-            <el-table-column prop="credits" label="学分" />
-            <el-table-column prop="student_count" label="学生数" />
-          </el-table>
-        </el-card>
-      </el-col>
-      
-      <el-col :span="12">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>课程成绩统计</span>
-            </div>
-          </template>
-          <el-table :data="courseStats" style="width: 100%">
-            <el-table-column prop="course_name" label="课程" />
-            <el-table-column prop="avg_score" label="平均分" />
-            <el-table-column prop="max_score" label="最高分" />
-            <el-table-column prop="min_score" label="最低分" />
-          </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>我的课程</span>
+              </div>
+            </template>
+            <el-table :data="myCourses" style="width: 100%">
+              <el-table-column prop="name" label="课程名称" />
+              <el-table-column prop="code" label="课程代码" />
+              <el-table-column prop="credits" label="学分" />
+              <el-table-column prop="student_count" label="学生数" />
+            </el-table>
+          </el-card>
+        </el-col>
+        
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>课程成绩统计</span>
+              </div>
+            </template>
+            <el-table :data="courseStats" style="width: 100%">
+              <el-table-column prop="course_name" label="课程" />
+              <el-table-column prop="avg_score" label="平均分" />
+              <el-table-column prop="max_score" label="最高分" />
+              <el-table-column prop="min_score" label="最低分" />
+            </el-table>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -143,6 +145,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.page-root {
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
 .teacher-dashboard {
   padding: 20px;
 }

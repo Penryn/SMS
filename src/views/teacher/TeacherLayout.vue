@@ -1,79 +1,12 @@
 <template>
-  <el-container class="teacher-layout">
-    <el-aside width="250px" class="sidebar">
-      <div class="logo">
-        <h2>学生管理系统</h2>
-        <p>教师端</p>
-      </div>
-      
-      <el-menu
-        :default-active="$route.path"
-        class="sidebar-menu"
-        router
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409EFF"
-      >
-        <el-menu-item index="/teacher/dashboard">
-          <el-icon><DataBoard /></el-icon>
-          <span>仪表盘</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teacher/courses">
-          <el-icon><Reading /></el-icon>
-          <span>我的课程</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teacher/students">
-          <el-icon><User /></el-icon>
-          <span>学生管理</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teacher/scores">
-          <el-icon><Document /></el-icon>
-          <span>成绩管理</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teacher/profile">
-          <el-icon><Avatar /></el-icon>
-          <span>个人信息</span>
-        </el-menu-item>
-      </el-menu>
-    </el-aside>
-    
-    <el-container>
-      <el-header class="header">
-        <div class="header-left">
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item>首页</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ getCurrentPageTitle() }}</el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-        
-        <div class="header-right">
-          <el-dropdown @command="handleCommand">
-            <span class="user-info">
-              <el-avatar :size="32" :src="userAvatar">
-                {{ authStore.user?.name?.charAt(0) }}
-              </el-avatar>
-              <span class="username">{{ authStore.user?.name }}</span>
-              <el-icon><ArrowDown /></el-icon>
-            </span>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
-                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
-      </el-header>
-      
-      <el-main class="main-content">
-        <router-view />
-      </el-main>
-    </el-container>
-  </el-container>
+  <div class="layout-root">
+    <aside class="sidebar">
+      <slot name="sidebar"></slot>
+    </aside>
+    <main class="main-content">
+      <slot />
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -129,75 +62,31 @@ const handleCommand = async (command: string) => {
 </script>
 
 <style scoped>
-.teacher-layout {
+.layout-root {
+  width: 100vw;
   height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background: #f5f6fa;
 }
-
 .sidebar {
-  background-color: #304156;
-  color: white;
-}
-
-.logo {
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #435266;
-}
-
-.logo h2 {
-  margin: 0;
-  font-size: 18px;
+  width: 220px;
+  height: 100vh;
+  min-height: 100vh;
+  background: #253858;
   color: #fff;
-}
-
-.logo p {
-  margin: 5px 0 0 0;
-  font-size: 12px;
-  color: #bfcbd9;
-}
-
-.sidebar-menu {
-  border: none;
-}
-
-.header {
-  background-color: #fff;
-  border-bottom: 1px solid #e6e6e6;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  flex-direction: column;
 }
-
-.header-left {
-  flex: 1;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.user-info:hover {
-  background-color: #f5f5f5;
-}
-
-.username {
-  margin: 0 8px;
-  color: #333;
-}
-
 .main-content {
-  background-color: #f0f2f5;
-  padding: 20px;
+  flex: 1;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
 }
 </style> 

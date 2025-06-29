@@ -22,7 +22,10 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (username: string, password: string, userType: number) => {
     try {
       const response = await authApi.login({ username, password, user_type: userType });
-      if (response.code === 200) {
+      console.log('登录响应:', response); // 调试信息
+      
+      // 后端返回 code: 0 表示成功
+      if (response.code === 0) {
         // 根据API文档，登录响应包含id和user_type
         const userData = {
           id: response.data.id,
@@ -38,9 +41,10 @@ export const useAuthStore = defineStore('auth', () => {
         
         return { success: true };
       } else {
-        return { success: false, message: response.message };
+        return { success: false, message: response.msg || response.message || '登录失败' };
       }
     } catch (error: any) {
+      console.error('登录错误:', error); // 调试信息
       return { success: false, message: error.message || '登录失败' };
     }
   };
@@ -60,18 +64,30 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 检查用户角色
   const hasRole = (role: string) => {
-    if (!user.value) return false;
+    if (!user.value) {
+      console.log('hasRole: 用户未登录')
+      return false;
+    }
     
     // 根据user_type判断角色
     const userType = user.value.user_type;
+    console.log('hasRole: 检查角色', role, '用户类型:', userType)
+    
     switch (role) {
       case 'student':
-        return userType === 1;
+        const isStudent = userType === 1;
+        console.log('hasRole: 学生角色检查结果:', isStudent)
+        return isStudent;
       case 'teacher':
-        return userType === 2;
+        const isTeacher = userType === 2;
+        console.log('hasRole: 教师角色检查结果:', isTeacher)
+        return isTeacher;
       case 'admin':
-        return userType === 3;
+        const isAdmin = userType === 3;
+        console.log('hasRole: 管理员角色检查结果:', isAdmin)
+        return isAdmin;
       default:
+        console.log('hasRole: 未知角色:', role)
         return false;
     }
   };
