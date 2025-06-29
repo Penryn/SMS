@@ -4,7 +4,7 @@
       <template #header>
         <div class="page-header">
           <span>课程管理</span>
-          <el-button type="primary" @click="showAddDialog = true">
+          <el-button type="primary" @click="resetForm(); showAddDialog = true">
             <el-icon><Plus /></el-icon>
             添加课程
           </el-button>
@@ -13,17 +13,25 @@
       
       <el-table
         v-loading="loading"
-        :data="courses"
+        :data="paginatedCourses"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
+        <el-table-column prop="id" label="课程ID" width="80" />
         <el-table-column prop="name" label="课程名称" />
-        <el-table-column prop="course_id" label="课程编号" />
-        <el-table-column prop="teacher_name" label="授课教师" />
-        <el-table-column prop="credits" label="学分" />
+        <el-table-column prop="school_year" label="学年" />
+        <el-table-column prop="semester" label="学期">
+          <template #default="{ row }">
+            {{ row.semester === '1' ? '上' : '下' }}
+          </template>
+        </el-table-column>
         <el-table-column prop="hours" label="学时" />
-        <el-table-column prop="semester" label="学期" />
+        <el-table-column prop="credit" label="学分" />
+        <el-table-column prop="class_id" label="所属班级">
+          <template #default="{ row }">
+            {{ getClassName(row.class_id) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="exam_type" label="考核方式" />
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button size="small" @click="handleEdit(row)">编辑</el-button>
@@ -31,6 +39,19 @@
           </template>
         </el-table-column>
       </el-table>
+      
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+          v-model:current-page="pagination.currentPage"
+          v-model:page-size="pagination.pageSize"
+          :page-sizes="[15, 20, 50, 100]"
+          :total="pagination.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-card>
 
     <!-- 添加/编辑课程对话框 -->
@@ -48,39 +69,36 @@
         <el-form-item label="课程名称" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="课程编号" prop="course_id">
-          <el-input v-model="form.course_id" :disabled="isEdit" />
+        <el-form-item label="学年" prop="school_year">
+          <el-input-number v-model="form.school_year" :min="2020" :max="2030" />
         </el-form-item>
-        <el-form-item label="授课教师" prop="teacher_id">
-          <el-select v-model="form.teacher_id" placeholder="请选择教师">
-            <el-option
-              v-for="teacher in teachers"
-              :key="teacher.id"
-              :label="teacher.name"
-              :value="teacher.id"
-            />
+        <el-form-item label="学期" prop="semester">
+          <el-select v-model="form.semester" placeholder="请选择学期">
+            <el-option label="上" value="1" />
+            <el-option label="下" value="2" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="学分" prop="credits">
-          <el-input-number v-model="form.credits" :min="1" :max="10" />
         </el-form-item>
         <el-form-item label="学时" prop="hours">
           <el-input-number v-model="form.hours" :min="16" :max="200" />
         </el-form-item>
-        <el-form-item label="学期" prop="semester">
-          <el-select v-model="form.semester" placeholder="请选择学期">
-            <el-option label="2024春季" value="2024-1" />
-            <el-option label="2024秋季" value="2024-2" />
-            <el-option label="2025春季" value="2025-1" />
+        <el-form-item label="学分" prop="credit">
+          <el-input-number v-model="form.credit" :min="0.5" :max="10" :precision="1" />
+        </el-form-item>
+        <el-form-item label="所属班级" prop="class_id">
+          <el-select v-model="form.class_id" placeholder="请选择班级">
+            <el-option
+              v-for="classItem in classes"
+              :key="classItem.id"
+              :label="classItem.name"
+              :value="classItem.id"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="课程描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入课程描述"
-          />
+        <el-form-item label="考核方式" prop="exam_type">
+          <el-select v-model="form.exam_type" placeholder="请选择考核方式">
+            <el-option label="考试" value="考试" />
+            <el-option label="考查" value="考查" />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -94,11 +112,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
-import type { Course, Teacher } from '../../types'
+import type { Course, Teacher, ClassInfo } from '../../types'
 import { useAuthStore } from '../../stores/auth'
 
 const authStore = useAuthStore()
@@ -106,28 +124,44 @@ const authStore = useAuthStore()
 const loading = ref(false)
 const courses = ref<Course[]>([])
 const teachers = ref<Teacher[]>([])
+const classes = ref<ClassInfo[]>([])
 const showAddDialog = ref(false)
 const isEdit = ref(false)
 const formRef = ref()
 
+// 分页相关
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 15,
+  total: 0
+})
+
+// 计算当前页显示的课程数据
+const paginatedCourses = computed(() => {
+  const start = (pagination.currentPage - 1) * pagination.pageSize
+  const end = start + pagination.pageSize
+  return courses.value.slice(start, end)
+})
+
 const form = reactive({
   id: 0,
-  course_id: '',
   name: '',
-  teacher_id: 0,
-  credits: 3,
-  hours: 48,
+  school_year: 2024,
   semester: '',
-  description: ''
+  hours: 48,
+  credit: 3,
+  class_id: undefined as number | undefined,
+  exam_type: ''
 })
 
 const rules = {
   name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-  course_id: [{ required: true, message: '请输入课程编号', trigger: 'blur' }],
-  teacher_id: [{ required: true, message: '请选择授课教师', trigger: 'change' }],
-  credits: [{ required: true, message: '请输入学分', trigger: 'blur' }],
+  school_year: [{ required: true, message: '请输入学年', trigger: 'blur' }],
+  semester: [{ required: true, message: '请选择学期', trigger: 'change' }],
   hours: [{ required: true, message: '请输入学时', trigger: 'blur' }],
-  semester: [{ required: true, message: '请选择学期', trigger: 'change' }]
+  credit: [{ required: true, message: '请输入学分', trigger: 'blur' }],
+  class_id: [{ required: true, message: '请选择班级', trigger: 'change' }],
+  exam_type: [{ required: true, message: '请选择考核方式', trigger: 'change' }]
 }
 
 const loadCourses = async () => {
@@ -137,6 +171,7 @@ const loadCourses = async () => {
     const response = await adminApi.getCourses(adminId)
     if (response.code === 0) {
       courses.value = response.data.list || []
+      pagination.total = response.data.total || courses.value.length
     }
   } catch (error) {
     ElMessage.error('加载课程列表失败')
@@ -155,6 +190,24 @@ const loadTeachers = async () => {
   } catch (error) {
     console.error('加载教师列表失败:', error)
   }
+}
+
+const loadClasses = async () => {
+  try {
+    const adminId = authStore.user?.id || 1
+    const response = await adminApi.getClasses(adminId)
+    if (response.code === 0) {
+      classes.value = response.data.list || []
+    }
+  } catch (error) {
+    console.error('加载班级列表失败:', error)
+  }
+}
+
+// 根据班级ID获取班级名称
+const getClassName = (classId: number) => {
+  const classItem = classes.value.find(c => c.id === classId)
+  return classItem ? classItem.name : `班级${classId}`
 }
 
 const handleEdit = (row: Course) => {
@@ -188,15 +241,26 @@ const handleSubmit = async () => {
   try {
     await formRef.value.validate()
     
+    // 检查班级是否已选择
+    if (!form.class_id) {
+      ElMessage.error('请选择班级')
+      return
+    }
+    
     const adminId = authStore.user?.id || 1
+    const submitData = {
+      ...form,
+      admin_id: adminId,
+      class_id: form.class_id as number
+    }
     
     if (isEdit.value) {
       // 编辑课程
-      await adminApi.updateCourse({ ...form, admin_id: adminId })
+      await adminApi.updateCourse(submitData)
       ElMessage.success('更新成功')
     } else {
       // 添加课程
-      await adminApi.createCourse({ ...form, admin_id: adminId })
+      await adminApi.createCourse(submitData)
       ElMessage.success('添加成功')
     }
     
@@ -207,13 +271,37 @@ const handleSubmit = async () => {
   }
 }
 
-const handleSelectionChange = (selection: Course[]) => {
-  console.log('选中的课程:', selection)
+const resetForm = () => {
+  if (formRef.value) {
+    formRef.value.resetFields();
+  }
+  isEdit.value = false;
+  Object.assign(form, {
+    id: 0,
+    name: '',
+    school_year: 2024,
+    semester: '',
+    hours: 48,
+    credit: 3,
+    class_id: undefined,
+    exam_type: ''
+  });
+}
+
+// 分页处理函数
+const handleSizeChange = (val: number) => {
+  pagination.pageSize = val
+  pagination.currentPage = 1
+}
+
+const handleCurrentChange = (val: number) => {
+  pagination.currentPage = val
 }
 
 onMounted(() => {
   loadCourses()
   loadTeachers()
+  loadClasses()
 })
 </script>
 
@@ -232,5 +320,11 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style> 
