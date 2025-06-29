@@ -25,10 +25,8 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
-    // 在开发环境中添加调试信息
-    if (import.meta.env.DEV) {
-      console.log('API请求:', config.method?.toUpperCase(), config.url);
-    }
+    // 添加调试信息（移除环境检查）
+    console.log('API请求:', config.method?.toUpperCase(), config.url, config.params);
     
     return config;
   },
@@ -41,10 +39,11 @@ api.interceptors.request.use(
 // 响应拦截器
 api.interceptors.response.use(
   (response: AxiosResponse) => {
+    console.log('API响应成功:', response.config.url, response.data);
     return response.data;
   },
   (error) => {
-    console.error('API请求错误:', error);
+    console.error('API请求错误:', error.config?.url, error);
     
     // 如果是CORS错误，提供友好的错误信息
     if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {

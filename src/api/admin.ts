@@ -7,10 +7,9 @@ import api from './config'
 import type {
   ApiResponse,
   Student,
-  StudentListResponse,
   Teacher,
   TeacherListResponse,
-  Class,
+  ClassInfo,
   ClassListResponse,
   Course,
   CourseListResponse,
@@ -22,13 +21,14 @@ import type {
   CityStudentCount,
   Province,
   City,
+  Score,
   GpaRank,
   CityGpaTopTenCount,
   ScoreDistribution,
   TeacherStatistics
 } from '../types';
 
-// 类型定义
+// API特有的类型定义
 export interface LoginReq {
   username: string // 用户名
   password: string // 密码
@@ -38,16 +38,6 @@ export interface LoginReq {
 export interface LoginResp {
   id: number // 用户ID
   user_type: number // 用户类型 1:学生 2:教师 3:管理员
-}
-
-export interface Student {
-  id: number // 学生表主键
-  student_id: string // 学号
-  name: string // 姓名
-  gender: string // 性别
-  age: number // 年龄
-  city_id: number // 城市ID
-  class_id: number // 班级ID
 }
 
 export interface CreateStudentReq {
@@ -74,17 +64,6 @@ export interface UpdateStudentReq {
 export interface DeleteStudentReq {
   admin_id: number // 管理员ID
   id: number // 学生表主键
-}
-
-export interface Teacher {
-  id: number // 教师表主键
-  teacher_id: string // 教师工号
-  name: string // 姓名
-  gender: string // 性别
-  age: number // 年龄
-  title: string // 职称
-  phone: string // 联系电话
-  is_admin: boolean // 是否管理员
 }
 
 export interface CreateTeacherReq {
@@ -115,17 +94,6 @@ export interface DeleteTeacherReq {
   id: number // 教师表主键
 }
 
-export interface Course {
-  id: number // 课程ID
-  name: string // 课程名称
-  school_year: number // 开课年份
-  semester: string // 开课学期
-  hours: number // 学时
-  credit: number // 学分
-  class_id: number // 归属班级
-  exam_type: string // 考核方式
-}
-
 export interface CreateCourseReq {
   admin_id: number // 管理员ID
   name: string // 课程名称
@@ -154,12 +122,6 @@ export interface DeleteCourseReq {
   id: number // 课程ID
 }
 
-export interface Class {
-  id: number // 班级ID
-  name: string // 班级名称
-  department_id: number // 所属专业ID
-}
-
 export interface CreateClassReq {
   admin_id: number // 管理员ID
   name: string // 班级名称
@@ -178,11 +140,6 @@ export interface DeleteClassReq {
   class_id: number // 班级ID
 }
 
-export interface Department {
-  id: number // 部门ID
-  name: string // 部门名称
-}
-
 export interface CreateDepartmentReq {
   admin_id: number // 管理员ID
   name: string // 部门名称
@@ -197,12 +154,6 @@ export interface UpdateDepartmentReq {
 export interface DeleteDepartmentReq {
   admin_id: number // 管理员ID
   department_id: number // 部门ID
-}
-
-export interface Teaching {
-  id: number // 授课表主键
-  teacher_id: string // 教师工号
-  course_id: number // 课程ID
 }
 
 export interface CreateTeachingReq {
@@ -223,22 +174,6 @@ export interface DeleteTeachingReq {
   id: number // 授课表主键
 }
 
-export interface Province {
-  id: number // 省份ID
-  name: string // 省份名称
-}
-
-export interface City {
-  id: number // 城市ID
-  name: string // 城市名称
-  province_id: number // 所属省份ID
-}
-
-export interface ScoreDistribution {
-  score_range: string // 分数范围
-  count: number // 该分数范围内的学生数量
-}
-
 export interface StudentScore {
   student_id: string // 学号
   student_name: string // 学生姓名
@@ -247,90 +182,6 @@ export interface StudentScore {
   class_name: string // 班级名称
   teacher_name: string // 教师姓名
   score: number // 分数
-}
-
-export interface TeacherStatistics {
-  teacher_id: string // 教师工号
-  teacher_name: string // 教师姓名
-  course_id: number // 课程ID
-  course_name: string // 课程名称
-  school_year: number // 学年
-  semester: string // 学期
-  student_count: number // 学生数
-  avg_score: number // 平均成绩
-}
-
-export interface GPARank {
-  rank: number // 排名
-  student_id: string // 学生ID
-  student_name: string // 学生姓名
-  class_id: number // 班级ID
-  class_name: string // 班级名称
-  gpa: number // 平均GPA
-}
-
-export interface CityGpaTopTenCount {
-  province_name: string // 省份名称
-  department_name: string // 专业名称
-  top_ten_count: number // 前十名数量
-}
-
-export interface CityStudentCount {
-  province_id: number // 省份ID
-  province_name: string // 省份名称
-  city_id: number // 城市ID
-  city_name: string // 城市名称
-  student_count: number // 学生数量
-}
-
-export interface AvgScore {
-  course_id: number // 课程ID
-  course_name: string // 课程名称
-  school_year: number // 学年
-  avg_score: number // 平均成绩
-}
-
-// API响应类型
-export interface ApiResponse<T = any> {
-  code: number
-  msg: string // 更新为后端实际返回的字段
-  data: T
-}
-
-export interface ListResponse<T> {
-  list: T[]
-}
-
-export interface StudentListResponse {
-  list: Student[]
-}
-
-export interface TeacherListResponse {
-  list: Teacher[]
-}
-
-export interface CourseListResponse {
-  list: Course[]
-}
-
-export interface ClassListResponse {
-  list: Class[]
-}
-
-export interface DepartmentListResponse {
-  list: Department[]
-}
-
-export interface TeachingListResponse {
-  list: Teaching[]
-}
-
-export interface ProvinceListResponse {
-  provinces: Province[]
-}
-
-export interface CityListResponse {
-  cities: City[]
 }
 
 export interface ScoreDistributionResponse {
@@ -342,23 +193,72 @@ export interface StudentScoreResponse {
 }
 
 export interface TeacherStatisticsResponse {
-  teacher_statistics: TeacherStatistics[]
+  list: TeacherStatistics[]
 }
 
-export interface GPARankResponse {
-  rank: GPARank[]
+export interface GpaRankResponse {
+  rank: GpaRank[]
 }
 
 export interface CityGpaTopTenCountResponse {
-  city_gpa_top_ten_count: CityGpaTopTenCount[]
+  list: CityGpaTopTenCount[]
 }
 
 export interface CityStudentCountResponse {
-  city_student_count: CityStudentCount[]
+  list: CityStudentCount[]
 }
 
 export interface AvgScoreResponse {
   avg_scores: AvgScore[]
+}
+
+export interface ProvinceListResponse {
+  provinces: Province[]
+}
+
+export interface CityListResponse {
+  cities: City[]
+}
+
+
+export interface ScoreListResponse {
+  list: Score[]
+}
+
+// 定义本地使用的响应类型
+export interface StudentListResponse {
+  list: Student[]
+}
+
+// API响应类型
+export interface ApisResponse<T = any> {
+  code: number
+  msg: string // 更新为后端实际返回的字段
+  data: T
+}
+
+export interface ListResponse<T> {
+  list: T[]
+}
+
+export interface TeachersListResponse {
+  list: Teacher[]
+}
+
+export interface CoursesListResponse {
+  list: Course[]
+}
+
+export interface ClassesListResponse {
+  list: ClassInfo[]
+}
+
+export interface DepartmentsListResponse {
+  list: Department[]
+}
+
+export interface TeachingsListResponse {
+  list: Teaching[]
 }
 
 /**
@@ -382,6 +282,7 @@ export const adminApi = {
    */
   getStudents(admin_id: number, class_id?: number): Promise<ApiResponse<StudentListResponse>> {
     const params: any = { admin_id }
+    console.log("getStudents", params)
     if (class_id) params.class_id = class_id
     return api.get('/api/admin/students', { params })
   },
@@ -536,7 +437,7 @@ export const adminApi = {
    * @param class_id 班级ID
    * @returns 班级信息
    */
-  getClass(admin_id: number, class_id: number): Promise<ApiResponse<Class>> {
+  getClass(admin_id: number, class_id: number): Promise<ApiResponse<ClassInfo>> {
     return api.get('/api/admin/class', { params: { admin_id, class_id } })
   },
 
@@ -616,15 +517,10 @@ export const adminApi = {
   /**
    * 获取授课列表
    * @param admin_id 管理员ID
-   * @param teacher_id 教师工号，可选
-   * @param course_id 课程ID，可选
    * @returns 授课列表
    */
-  getTeachings(admin_id: number, teacher_id?: string, course_id?: number): Promise<ApiResponse<TeachingListResponse>> {
-    const params: any = { admin_id }
-    if (teacher_id) params.teacher_id = teacher_id
-    if (course_id) params.course_id = course_id
-    return api.get('/api/admin/teachings', { params })
+  getTeachings(admin_id: number): Promise<ApiResponse<TeachingListResponse>> {
+    return api.get('/api/admin/teachings', { params: { admin_id } })
   },
 
   /**
@@ -676,11 +572,19 @@ export const adminApi = {
   /**
    * 获取城市列表
    * @param admin_id 管理员ID
-   * @param province_id 省份ID
    * @returns 城市列表
    */
-  getCities(admin_id: number, province_id: number): Promise<ApiResponse<CityListResponse>> {
-    return api.get('/api/admin/cities', { params: { admin_id, province_id } })
+  getCities(admin_id: number): Promise<ApiResponse<CityListResponse>> {
+    return api.get('/api/admin/cities', { params: { admin_id } })
+  },
+
+  /**
+   * 获取分数列表
+   * @param admin_id 管理员ID
+   * @returns 分数列表
+   */
+  getScores(admin_id: number): Promise<ApiResponse<ScoreListResponse>> {
+    return api.get('/api/admin/scores', { params: { admin_id } })
   },
 
   /**
@@ -721,7 +625,7 @@ export const adminApi = {
    * @param type 排名类型 1:专业 2:班级
    * @returns GPA排名
    */
-  getDepartmentGpaRank(admin_id: number, department_id: number, type: number): Promise<ApiResponse<GPARankResponse>> {
+  getDepartmentGpaRank(admin_id: number, department_id: number, type: number): Promise<ApiResponse<GpaRankResponse>> {
     return api.get('/api/admin/department/gpa/rank', { params: { admin_id, department_id, type } })
   },
 

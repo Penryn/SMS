@@ -40,7 +40,7 @@ export interface Student {
 }
 
 export interface StudentListResponse {
-  students: Student[];
+  list: Student[];
   total: number;
 }
 
@@ -58,12 +58,12 @@ export interface Teacher {
 }
 
 export interface TeacherListResponse {
-  teachers: Teacher[];
+  list: Teacher[];
   total: number;
 }
 
 // 班级相关类型
-export interface Class {
+export interface ClassInfo {
   id: number;
   name: string;
   department_id: number;
@@ -72,7 +72,7 @@ export interface Class {
 }
 
 export interface ClassListResponse {
-  classes: Class[];
+  list: ClassInfo[];
   total: number;
 }
 
@@ -87,7 +87,7 @@ export interface Course {
 }
 
 export interface CourseListResponse {
-  courses: Course[];
+  list: Course[];
   total: number;
 }
 
@@ -99,7 +99,7 @@ export interface Department {
 }
 
 export interface DepartmentListResponse {
-  departments: Department[];
+  list: Department[];
   total: number;
 }
 
@@ -114,7 +114,7 @@ export interface Teaching {
 }
 
 export interface TeachingListResponse {
-  teachings: Teaching[];
+  list: Teaching[];
   total: number;
 }
 
@@ -156,6 +156,14 @@ export interface City {
   name: string;
   province_id: number;
 }
+
+export interface Score {
+  id: number;
+  student_id: number;
+  course_id: number;
+  score: number;
+}
+
 
 export interface GpaRank {
   student_id: number;
