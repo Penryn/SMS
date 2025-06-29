@@ -87,16 +87,10 @@
           
           <div class="quick-actions">
             <el-button type="primary" @click="goToCourses" style="width: 100%; margin-bottom: 10px;">
-              <el-icon><Reading /></el-icon>
               我的课程
             </el-button>
             <el-button type="success" @click="goToStudents" style="width: 100%; margin-bottom: 10px;">
-              <el-icon><User /></el-icon>
               学生管理
-            </el-button>
-            <el-button type="warning" @click="goToScores" style="width: 100%; margin-bottom: 10px;">
-              <el-icon><Document /></el-icon>
-              成绩管理
             </el-button>
             <el-button type="info" @click="goToDashboard" style="width: 100%;">
               <el-icon><DataBoard /></el-icon>
@@ -214,10 +208,6 @@ const goToCourses = () => {
 
 const goToStudents = () => {
   router.push('/teacher/students')
-}
-
-const goToScores = () => {
-  router.push('/teacher/scores')
 }
 
 const goToDashboard = () => {

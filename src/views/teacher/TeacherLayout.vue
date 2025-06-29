@@ -20,18 +20,13 @@
         </el-menu-item>
         
         <el-menu-item index="/teacher/courses">
-          <el-icon><Reading /></el-icon>
-          <span>我的课程</span>
+          <el-icon><Document /></el-icon>
+          <span>课程管理</span>
         </el-menu-item>
         
         <el-menu-item index="/teacher/students">
           <el-icon><User /></el-icon>
           <span>学生管理</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teacher/scores">
-          <el-icon><Document /></el-icon>
-          <span>成绩管理</span>
         </el-menu-item>
         
         <el-menu-item index="/teacher/profile">
@@ -95,7 +90,6 @@ const getCurrentPageTitle = () => {
     '/teacher/dashboard': '仪表盘',
     '/teacher/courses': '我的课程',
     '/teacher/students': '学生管理',
-    '/teacher/scores': '成绩管理',
     '/teacher/profile': '个人信息'
   }
   return routeMap[route.path] || '首页'

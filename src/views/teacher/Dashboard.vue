@@ -177,10 +177,6 @@ const goToStudents = () => {
   router.push('/teacher/students')
 }
 
-const goToScores = () => {
-  router.push('/teacher/scores')
-}
-
 const goToProfile = () => {
   router.push('/teacher/profile')
 }

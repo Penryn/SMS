@@ -42,7 +42,6 @@
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button size="small" @click="viewStudents(row)">查看学生</el-button>
-            <el-button size="small" type="primary" @click="manageScores(row)">成绩管理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -111,13 +110,6 @@ const loadCourses = async () => {
 const viewStudents = (course: Course) => {
   router.push({
     path: '/teacher/students',
-    query: { courseId: course.course_id.toString() }
-  })
-}
-
-const manageScores = (course: Course) => {
-  router.push({
-    path: '/teacher/scores',
     query: { courseId: course.course_id.toString() }
   })
 }

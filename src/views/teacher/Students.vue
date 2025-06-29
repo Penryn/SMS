@@ -45,6 +45,26 @@
         </el-descriptions>
       </el-card>
     </el-dialog>
+
+    <!-- 设置成绩对话框 -->
+    <el-dialog
+      v-model="scoreDialogVisible"
+      title="设置成绩"
+      width="400px"
+    >
+      <el-form v-if="selectedStudent" :model="scoreForm" label-width="80px">
+        <el-form-item label="学生姓名">
+          <span>{{ selectedStudent.name }}</span>
+        </el-form-item>
+        <el-form-item label="成绩">
+          <el-input v-model="scoreForm.score" type="number" min="0" max="100" placeholder="请输入成绩" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitScore">保存成绩</el-button>
+          <el-button @click="scoreDialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,6 +87,8 @@ const selectedSemester = ref('')
 const years = ref<number[]>([])
 const studentDialogVisible = ref(false)
 const selectedStudent = ref<Student | null>(null)
+const scoreDialogVisible = ref(false)
+const scoreForm = ref({ score: 0 as number })
 
 const loadStudents = async () => {
   loading.value = true
@@ -117,15 +139,39 @@ const viewStudent = async (student: Student) => {
   }
 }
 
-const setScore = (student: Student) => {
-  // 跳转到成绩管理页面，并传递学生ID
-  router.push({
-    path: '/teacher/scores',
-    query: {
-      courseId: route.query.courseId,
-      studentId: student.student_id
+const setScore = async (student: Student) => {
+  try {
+    const teacherId = authStore.user?.id
+    if (!teacherId) return
+    // 直接设置学生信息并弹窗
+    selectedStudent.value = student
+    scoreForm.value.score = (student as any).score || 0
+    scoreDialogVisible.value = true
+  } catch (error) {
+    ElMessage.error('获取学生详情失败')
+  }
+}
+
+const submitScore = async () => {
+  try {
+    const teacherId = authStore.user?.id
+    const courseId = route.query.courseId ? Number(route.query.courseId) : undefined
+    if (!teacherId || !courseId || !selectedStudent.value) return
+    // 调用设置成绩接口
+    const response = await teacherApi.setStudentScore({
+      teacher_id: teacherId,
+      student_id: selectedStudent.value.student_id,
+      course_id: courseId,
+      score: Number(scoreForm.value.score)
+    })
+    if (response.code === 0) {
+      ElMessage.success('成绩设置成功')
+      scoreDialogVisible.value = false
+      loadStudents() // 刷新列表
     }
-  })
+  } catch (error) {
+    ElMessage.error('设置成绩失败')
+  }
 }
 
 onMounted(() => {
