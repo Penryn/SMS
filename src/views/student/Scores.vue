@@ -1,24 +1,21 @@
 <template>
-  <div class="scores-page">
-    <el-card>
-      <template #header>
-        <div class="page-header">
-          <span>我的成绩</span>
-        </div>
-      </template>
-      
-      <el-table
-        v-loading="loading"
-        :data="scores"
-        style="width: 100%"
-      >
-        <el-table-column prop="course_name" label="课程名称" />
-        <el-table-column prop="score" label="成绩" />
-        <el-table-column prop="semester" label="学期" />
-        <el-table-column prop="academic_year" label="学年" />
-      </el-table>
-    </el-card>
-  </div>
+  <el-card>
+    <template #header>
+      <div class="page-header">
+        <span>我的成绩</span>
+      </div>
+    </template>
+    <el-table
+      v-loading="loading"
+      :data="scores"
+      style="width: 100%"
+    >
+      <el-table-column prop="course_name" label="课程名称" />
+      <el-table-column prop="score" label="成绩" />
+      <el-table-column prop="semester" label="学期" />
+      <el-table-column prop="academic_year" label="学年" />
+    </el-table>
+  </el-card>
 </template>
 
 <script setup lang="ts">
@@ -49,10 +46,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.scores-page {
-  padding: 20px;
-}
-
 .page-header {
   display: flex;
   justify-content: space-between;

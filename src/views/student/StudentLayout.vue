@@ -135,7 +135,10 @@ const handleCommand = async (command: string) => {
   padding: 0;
 }
 .sidebar {
-  width: 220px;
+  width: 220px !important;
+  min-width: 220px !important;
+  max-width: 220px !important;
+  flex-shrink: 0 !important;
   height: 100vh;
   background: #253858;
   color: #fff;
@@ -173,7 +176,7 @@ const handleCommand = async (command: string) => {
   flex-direction: column;
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 .logo {
   padding: 20px;

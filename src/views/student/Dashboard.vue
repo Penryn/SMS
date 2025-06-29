@@ -1,82 +1,76 @@
 <template>
-  <div class="page-root">
-    <div class="student-dashboard">
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-card class="stat-card">
-            <div class="stat-content">
-              <div class="stat-icon course-icon">
-                <el-icon><Reading /></el-icon>
-              </div>
-              <div class="stat-info">
-                <div class="stat-number">{{ stats.courseCount }}</div>
-                <div class="stat-label">已选课程</div>
-              </div>
+  <div class="dashboard">
+    <el-row :gutter="20" style="width: 100%">
+      <el-col :span="8">
+        <el-card class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon course-icon">
+              <el-icon><Reading /></el-icon>
             </div>
-          </el-card>
-        </el-col>
-        
-        <el-col :span="8">
-          <el-card class="stat-card">
-            <div class="stat-content">
-              <div class="stat-icon score-icon">
-                <el-icon><Document /></el-icon>
-              </div>
-              <div class="stat-info">
-                <div class="stat-number">{{ stats.avgScore }}</div>
-                <div class="stat-label">平均成绩</div>
-              </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.courseCount }}</div>
+              <div class="stat-label">已选课程</div>
             </div>
-          </el-card>
-        </el-col>
-        
-        <el-col :span="8">
-          <el-card class="stat-card">
-            <div class="stat-content">
-              <div class="stat-icon gpa-icon">
-                <el-icon><TrendCharts /></el-icon>
-              </div>
-              <div class="stat-info">
-                <div class="stat-number">{{ stats.gpa }}</div>
-                <div class="stat-label">GPA</div>
-              </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon score-icon">
+              <el-icon><Document /></el-icon>
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      
-      <el-row :gutter="20" style="margin-top: 20px;">
-        <el-col :span="12">
-          <el-card>
-            <template #header>
-              <div class="card-header">
-                <span>我的课程</span>
-              </div>
-            </template>
-            <el-table :data="myCourses" style="width: 100%">
-              <el-table-column prop="name" label="课程名称" />
-              <el-table-column prop="teacher" label="授课教师" />
-              <el-table-column prop="credits" label="学分" />
-            </el-table>
-          </el-card>
-        </el-col>
-        
-        <el-col :span="12">
-          <el-card>
-            <template #header>
-              <div class="card-header">
-                <span>最近成绩</span>
-              </div>
-            </template>
-            <el-table :data="recentScores" style="width: 100%">
-              <el-table-column prop="course_name" label="课程" />
-              <el-table-column prop="score" label="成绩" />
-              <el-table-column prop="semester" label="学期" />
-            </el-table>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.avgScore }}</div>
+              <div class="stat-label">平均成绩</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon gpa-icon">
+              <el-icon><TrendCharts /></el-icon>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.gpa }}</div>
+              <div class="stat-label">GPA</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin-top: 20px; width: 100%">
+      <el-col :span="12">
+        <el-card>
+          <template #header>
+            <div class="card-header">
+              <span>我的课程</span>
+            </div>
+          </template>
+          <el-table :data="myCourses" style="width: 100%">
+            <el-table-column prop="name" label="课程名称" />
+            <el-table-column prop="teacher" label="授课教师" />
+            <el-table-column prop="credits" label="学分" />
+          </el-table>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <template #header>
+            <div class="card-header">
+              <span>最近成绩</span>
+            </div>
+          </template>
+          <el-table :data="recentScores" style="width: 100%">
+            <el-table-column prop="course_name" label="课程" />
+            <el-table-column prop="score" label="成绩" />
+            <el-table-column prop="semester" label="学期" />
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -130,30 +124,19 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-root {
-  width: 100vw;
-  height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
+.dashboard {
+  width: 100%;
+  height: 100%;
+  padding: 0;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
 }
-
-.student-dashboard {
-  padding: 20px;
-}
-
 .stat-card {
   margin-bottom: 20px;
 }
-
 .stat-content {
   display: flex;
   align-items: center;
 }
-
 .stat-icon {
   width: 60px;
   height: 60px;
@@ -165,36 +148,29 @@ onMounted(() => {
   font-size: 24px;
   color: white;
 }
-
 .course-icon {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-
 .score-icon {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
-
 .gpa-icon {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
-
 .stat-info {
   flex: 1;
 }
-
 .stat-number {
   font-size: 28px;
   font-weight: bold;
   color: #333;
   line-height: 1;
 }
-
 .stat-label {
   font-size: 14px;
   color: #666;
   margin-top: 5px;
 }
-
 .card-header {
   font-weight: bold;
   color: #333;
