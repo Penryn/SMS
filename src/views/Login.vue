@@ -16,6 +16,7 @@
             placeholder="选择用户类型"
             size="large"
             class="user-type-select"
+            popper-class="user-type-dropdown"
           >
             <el-option label="学生" :value="1" />
             <el-option label="教师" :value="2" />
@@ -229,6 +230,25 @@ const handleLogin = async () => {
 
 .user-type-select {
   width: 100%;
+}
+
+.user-type-select :deep(.el-input__wrapper) {
+  border-radius: 8px;
+  border: 1.5px solid #e4e7ed;
+  transition: all 0.3s;
+}
+
+.user-type-select :deep(.el-input__wrapper:hover) {
+  border-color: #a18cd1;
+}
+
+.user-type-select :deep(.el-input__wrapper.is-focus) {
+  border-color: #a18cd1;
+  box-shadow: 0 0 0 2px rgba(161, 140, 209, 0.08);
+}
+
+:global(.user-type-dropdown) {
+  z-index: 9999 !important;
 }
 
 .login-input {
