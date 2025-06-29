@@ -13,17 +13,26 @@
       
       <el-table
         v-loading="loading"
-        :data="teachers"
+        :data="paginatedTeachers"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="姓名" />
         <el-table-column prop="teacher_id" label="工号" />
-        <el-table-column prop="gender" label="性别" />
+        <el-table-column prop="gender" label="性别">
+          <template #default="{ row }">
+            {{ row.gender === 'M' ? '男' : '女' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="age" label="年龄" />
         <el-table-column prop="title" label="职称" />
-        <el-table-column prop="phone" label="电话" />
-        <el-table-column prop="email" label="邮箱" />
+        <el-table-column prop="phone" label="联系电话" />
+        <el-table-column prop="is_admin" label="管理员权限">
+          <template #default="{ row }">
+            <el-tag :type="row.is_admin ? 'danger' : 'info'">
+              {{ row.is_admin ? '是' : '否' }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button size="small" @click="handleEdit(row)">编辑</el-button>
@@ -31,6 +40,19 @@
           </template>
         </el-table-column>
       </el-table>
+      
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+          v-model:current-page="pagination.currentPage"
+          v-model:page-size="pagination.pageSize"
+          :page-sizes="[15, 20, 50, 100]"
+          :total="pagination.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-card>
 
     <!-- 添加/编辑教师对话框 -->
@@ -66,9 +88,6 @@
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" />
         </el-form-item>
-        <el-form-item label="是否管理员" prop="is_admin">
-          <el-switch v-model="form.is_admin" />
-        </el-form-item>
         <el-form-item v-if="!isEdit" label="密码" prop="password">
           <el-input v-model="form.password" type="password" />
         </el-form-item>
@@ -84,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
@@ -98,6 +117,20 @@ const teachers = ref<Teacher[]>([])
 const showAddDialog = ref(false)
 const isEdit = ref(false)
 const formRef = ref()
+
+// 分页相关
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 15,
+  total: 0
+})
+
+// 计算当前页显示的教师数据
+const paginatedTeachers = computed(() => {
+  const start = (pagination.currentPage - 1) * pagination.pageSize
+  const end = start + pagination.pageSize
+  return teachers.value.slice(start, end)
+})
 
 const form = reactive({
   id: 0,
@@ -117,8 +150,7 @@ const rules = {
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
   age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
   title: [{ required: true, message: '请输入职称', trigger: 'blur' }],
-  phone: [{ required: true, message: '请输入电话', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  phone: [{ required: true, message: '请输入电话', trigger: 'blur' }]
 }
 
 const loadTeachers = async () => {
@@ -128,6 +160,7 @@ const loadTeachers = async () => {
     const response = await adminApi.getTeachers(adminId)
     if (response.code === 0) {
       teachers.value = response.data.list || []
+      pagination.total = teachers.value.length
     }
   } catch (error) {
     ElMessage.error('加载教师列表失败')
@@ -186,8 +219,14 @@ const handleSubmit = async () => {
   }
 }
 
-const handleSelectionChange = (selection: Teacher[]) => {
-  console.log('选中的教师:', selection)
+// 分页处理函数
+const handleSizeChange = (val: number) => {
+  pagination.pageSize = val
+  pagination.currentPage = 1
+}
+
+const handleCurrentChange = (val: number) => {
+  pagination.currentPage = val
 }
 
 onMounted(() => {
@@ -210,5 +249,11 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style> 
