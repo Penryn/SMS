@@ -191,25 +191,34 @@ const handleLogin = async () => {
     await loginFormRef.value.validate()
     loading.value = true
     
-    await authStore.login({
-      username: loginForm.username,
-      password: loginForm.password,
-      userType: loginForm.userType
-    })
-
-    ElMessage.success('登录成功！')
+    // 调用登录API，传递正确的参数
+    const result = await authStore.login(
+      loginForm.username,
+      loginForm.password,
+      loginForm.userType
+    )
     
-    // 根据用户类型跳转到对应页面
-    const routes = {
-      1: '/student/dashboard',  // 学生
-      2: '/teacher/dashboard',  // 教师
-      3: '/admin/dashboard'     // 管理员
+    // 检查登录结果
+    if (result.success) {
+      ElMessage.success('登录成功！')
+      
+      // 根据用户类型跳转到对应页面
+      const routes = {
+        1: '/student/dashboard',  // 学生
+        2: '/teacher/dashboard',  // 教师
+        3: '/admin/dashboard'     // 管理员
+      }
+      
+      // 使用 router.replace 而不是 router.push，避免用户通过后退按钮回到登录页
+      await router.replace(routes[loginForm.userType] || '/student/dashboard')
+    } else {
+      // 登录失败，显示错误信息
+      ElMessage.error(result.message || '登录失败，请检查用户名和密码')
     }
     
-    router.push(routes[loginForm.userType] || '/student/dashboard')
-    
   } catch (error: any) {
-    ElMessage.error(error.message || '登录失败，请检查用户名和密码')
+    console.error('登录异常:', error)
+    ElMessage.error(error.message || '登录失败，请稍后重试')
   } finally {
     loading.value = false
   }
