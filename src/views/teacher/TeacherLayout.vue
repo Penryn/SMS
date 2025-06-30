@@ -616,7 +616,8 @@ const handleCommand = async (command: string) => {
 .main-content::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-</style>
+
+.sidebar {
   width: 220px;
   height: 100vh;
   background: #253858;
