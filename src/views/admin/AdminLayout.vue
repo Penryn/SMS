@@ -65,8 +65,7 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
-                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -133,9 +132,6 @@ const handleCommand = async (command: string) => {
     } catch {
       // 用户取消
     }
-  } else if (command === 'profile') {
-    // 跳转到个人信息页面
-    console.log('个人信息')
   }
 }
 </script>

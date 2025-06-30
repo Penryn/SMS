@@ -11,6 +11,21 @@
         </div>
       </template>
       
+      <!-- 搜索筛选区域 -->
+      <div class="search-container">
+        <el-input
+          v-model="searchName"
+          placeholder="请输入学生姓名搜索"
+          style="width: 300px"
+          clearable
+          @input="handleSearch"
+        >
+          <template #prefix>
+            <el-icon><Search /></el-icon>
+          </template>
+        </el-input>
+      </div>
+      
       <el-table
         v-loading="loading"
         :data="paginatedStudents"
@@ -150,7 +165,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Search } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
 import type { Student } from '../../types'
 import { useAuthStore } from '../../stores/auth'
@@ -166,6 +181,7 @@ const provinces = ref<any[]>([])
 const showAddDialog = ref(false)
 const isEdit = ref(false)
 const formRef = ref()
+const searchName = ref('')
 
 // 分页相关
 const pagination = reactive({
@@ -174,11 +190,20 @@ const pagination = reactive({
   total: 0
 })
 
-// 计算当前页显示的学生数据
+// 计算当前页显示的学生数据，支持搜索筛选
 const paginatedStudents = computed(() => {
+  let filteredStudents = students.value
+  
+  // 根据姓名搜索筛选
+  if (searchName.value.trim()) {
+    filteredStudents = students.value.filter(student => 
+      student.name.toLowerCase().includes(searchName.value.toLowerCase())
+    )
+  }
+  
   const start = (pagination.currentPage - 1) * pagination.pageSize
   const end = start + pagination.pageSize
-  return students.value.slice(start, end)
+  return filteredStudents.slice(start, end)
 })
 
 const form = reactive({
@@ -450,6 +475,10 @@ const handleCurrentChange = (val: number) => {
   pagination.currentPage = val
 }
 
+const handleSearch = () => {
+  pagination.currentPage = 1 // 重置到第一页
+}
+
 onMounted(() => {
   loadStudents()
   loadCities()
@@ -480,5 +509,11 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 </style> 
