@@ -112,7 +112,7 @@ const loadStudents = async () => {
       students.value = response.data.students
       
       // 生成年份列表（这里可能需要从课程数据中获取）
-      years.value = [2024, 2023, 2022]
+      years.value = [2025, 2023, 2022]
     }
   } catch (error) {
     ElMessage.error('加载学生列表失败')

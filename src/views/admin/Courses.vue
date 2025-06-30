@@ -146,7 +146,7 @@ const paginatedCourses = computed(() => {
 const form = reactive({
   id: 0,
   name: '',
-  school_year: 2024,
+  school_year:2025,
   semester: '',
   hours: 48,
   credit: 3,
@@ -279,7 +279,7 @@ const resetForm = () => {
   Object.assign(form, {
     id: 0,
     name: '',
-    school_year: 2024,
+    school_year:2025,
     semester: '',
     hours: 48,
     credit: 3,

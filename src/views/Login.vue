@@ -111,7 +111,7 @@
 
         <!-- 页脚信息 -->
         <div class="login-footer">
-          <p>© 2024 学生管理系统. 版权所有</p>
+          <p>© 2025 学生管理系统. 版权所有</p>
           <div class="footer-links">
             <el-link>使用条款</el-link>
             <el-divider direction="vertical" />

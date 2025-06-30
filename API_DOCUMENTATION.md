@@ -653,7 +653,7 @@ console.log(result.data.list);
 ```javascript
 const studentData = {
   admin_id: 1,
-  student_id: "2024001",
+  student_id: "2025001",
   password: "123456",
   name: "张三",
   gender: "男",
